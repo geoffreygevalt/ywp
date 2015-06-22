@@ -1,0 +1,1 @@
+registerTouch:function(){var f=this,g=f.options.swipeArgs||{fallbackToMouseEvents:false,allowPageScroll:"vertical",swipe:function(i,h){if(h==="up"||h==="down"){return false}f.swipeDir=(h==="left")?"right":"left";f.setNextPanel(f.swipeDir)}};d(f.sliderId+" .panel").swipe(g)},

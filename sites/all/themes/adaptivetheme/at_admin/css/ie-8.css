@@ -1,0 +1,38 @@
+/*
+ * NOTICE: This is a commercial Drupal theme. Elements of this theme including this field
+ * are licensed under a standard commercial license which does not permit redistribution. 
+ */
+body.front.fpcc-2 #block-system-main article.article,
+body.page-taxonomy.tpcc-2 #block-system-main article.article {
+  width: 49%;
+}
+body.front.fpcc-3 #block-system-main article.article,
+body.page-taxonomy.tpcc-3 #block-system-main article.article {
+  width: 33%;
+}
+body.front.fpcc-4 #block-system-main article.article,
+body.page-taxonomy.tpcc-4 #block-system-main article.article {
+  width: 24.5%;
+}
+body.front.fpcc-5 #block-system-main article.article,
+body.page-taxonomy.tpcc-5 #block-system-main article.article {
+  width: 19.5%;
+}
+body.front.fpcc-6 #block-system-main article.article,
+body.page-taxonomy.tpcc-6 #block-system-main article.article {
+  width: 16.33%;
+}
+body.front.fpcc-7 #block-system-main article.article,
+body.page-taxonomy.tpcc-7 #block-system-main article.article {
+  width: 14%;
+}
+body.front.fpcc-8 #block-system-main article.article,
+body.page-taxonomy.tpcc-8 #block-system-main article.article {
+  width: 12%;
+}
+.nav ul li a:hover,
+.nav ul li a:focus,
+.nav ul li a:active {
+  background: url(images/transparent-overlay-33.png);
+}
+
