@@ -1,0 +1,46 @@
+﻿
+## Installation
+
+NOTE: This theme is for Drupal 7. If you purchased this for Drupal 6 by
+mistake please contact us for a refund.
+
+
+1. Download and install the base theme: http://drupal.org/project/adaptivetheme,
+   use the latest Drupal 7.x-3.x version.
+
+
+2. Install this theme and enable as default.
+
+
+3. Visit the "Settings" page and save the theme settings (you must do this at
+   least once).
+
+
+4. On the "Settings" page you will find the color settings and all other
+   Advanced theme settings. Play!
+
+
+
+## About Demos vs Themes in Drupal
+
+Drupal sites require configuration, do not expect what you see in the online
+demo, which is a fully configured Drupal site with this theme applied to it.
+If that's what you need, install the demo site. The demo site can also act
+as the perfect guide to setting up your own site and theme.
+
+
+
+## Help
+
+If you need help with anything please post an issue (you must be logged in):
+http://adaptivethemes.com/project/issues
+
+Remember, you can download this theme as many times as you like so don't be
+scared to hack it!
+
+
+
+## Licence
+
+Please read the licence and view our EULA online. This is a commercial theme
+and in part subject to a commercial licence. All PHP is GPL.

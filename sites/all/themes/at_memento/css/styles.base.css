@@ -1,0 +1,802 @@
+/*
+ * NOTICE: This is a commercial Drupal theme. Elements of this theme including this field
+ * are licensed under a standard commercial license which does not permit redistribution.
+ */
+
+/* Set the default font size on html so we can use body to set a relative font size */
+html {
+  font-size: 81.3%; /* 13px */
+}
+
+/* Fallback font and other body styles */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+/* Headings */
+h1 {
+  font-size: 1.846em;
+}
+h2 {
+  font-size: 1.385em;
+}
+h3 {
+  font-size: 1.231em;
+}
+h4 {
+  font-size: 1.077em;
+}
+h5, h6 {
+  font-size: 1em;
+}
+p {
+  margin: 0 0 0.75em;
+  padding: 0;
+}
+blockquote p {
+  margin: 0;
+}
+strong {
+  font-weight: bold;
+}
+em, dfn {
+  font-style: italic;
+}
+dfn {
+  font-weight: bold;
+}
+sup, sub {
+  line-height: 0;
+}
+del {
+  color: #666;
+}
+ins {
+  border-bottom: none;
+  text-decoration: none;
+}
+pre, code {
+  margin: 1.5em 0;
+  padding: 0;
+  white-space: pre;
+}
+pre, code, tt {
+  font: 1em "Andale Mono", "Lucida Console", monospace;
+}
+p code {
+  font: 1em "Courier New", Courier, monospace;
+}
+sup {
+  vertical-align: text-top;
+}
+sub {
+  vertical-align: text-bottom;
+}
+li li, li p, td p, blockquote p {
+  font-size: 1em; /* Mitigate relative shrinkage */
+}
+blockquote, q {
+  font-style: italic;
+  margin: 0 0 1.5em;
+  padding: 0 0 0 3em;
+}
+blockquote:before,
+blockquote:after,
+q:before, q:after {
+  content: ""; /* Remove possible quote marks (") from <q>, <blockquote>. */
+}
+blockquote, q {
+  quotes: "" "";
+}
+table {
+  border-spacing: 0;
+  margin: 0 0 10px;
+  padding: 0;
+  width: 100%;
+}
+td, th {
+ padding: 5px;
+}
+th {
+  border-bottom: 0 none;
+}
+tr.even, tr.odd {
+  background-color: transparent;
+  border: 0 none;
+  padding: 0;
+}
+tbody tr:nth-child(2n+1),
+tr.odd {
+  background-color: rgba(0,0,0,0.03);
+}
+tbody {
+  border-top: 0 none;
+}
+
+/* Global Link Styles */
+ a {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+a:link,
+a:visited {}
+
+a:hover,
+a:focus,
+a:active  {}
+
+a.active  {}
+a.active-trail {}
+
+/* Drupal sets this to black. */
+li a.active {}
+
+img {
+  border: 0 none;
+  height: auto;
+  max-width: 100%;
+}
+
+figure {
+  margin: 0;
+}
+
+/* Remove borders on linked images. */
+a img {
+  border: none;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0 0 1em 15px;
+  padding: 0;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Set nested list indentation */
+ul ul, ul ol,
+ol ol, ol ul,
+.block ul ul,
+.block ul ol,
+.block ol ol,
+.block ol ul,
+.item-list ul ul,
+.item-list ul ol,
+.item-list ol ol,
+.item-list ol ul {
+  margin: 0 0 0 15px;
+}
+
+/* Special case pager list */
+.item-list .pager {
+  margin: 0;
+  text-align: right;
+}
+
+/* Set nested list list-style-types */
+ul {
+  list-style-type: disc;
+}
+ul ul {
+  list-style-type: circle;
+}
+ul ul ul {
+  list-style-type: square;
+}
+ul ul ul ul {
+  list-style-type: circle;
+}
+ol {
+  list-style-type: decimal;
+}
+ol ol {
+  list-style-type: lower-alpha;
+}
+ol ol ol {
+  list-style-type: decimal;
+}
+
+dt {
+  font-weight: bold;
+}
+dd {
+  margin: 0 0 1.5em 1.75em;
+}
+.item-list ul,
+.item-list ol {
+  margin: 0 0 0 15px;
+  padding: 0;
+}
+.item-list ul li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Forms */
+input.form-text,
+textarea {
+  padding: 4px;
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+select {
+  padding: 3px;
+}
+.form-textarea-wrapper textarea {
+  font-size: 130%;
+}
+.filter-wrapper {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.filter-help {
+  padding: 10px 0 0 0;
+}
+.filter-wrapper .form-item {
+  padding: 0 0 10px 2px;
+}
+.filter-guidelines {
+  padding: 0 10px 10px 2px;
+}
+.form-submit {
+  border: 0;
+  margin: 5px 8px;
+  padding: 2px 10px;
+  cursor: pointer;
+}
+.form-submit:focus,
+.form-submit:hover {
+}
+input.form-text,
+textarea,
+select {
+}
+
+/* Search */
+.region-menu-bar-top #block-search-form input.form-text {
+  padding: 2px 4px;
+}
+
+/* Site Header */
+#menu-top-wrapper,
+#header-wrapper {
+  position: relative;
+  z-index: 100;
+}
+#header-wrapper header {
+  margin: 0 10px 10px;
+  padding-bottom: 25px;
+}
+#branding {}
+#logo {}
+#site-name {
+  font-size: 3.6em;
+}
+#site-slogan {
+  font-size: 2em; /* trying for the x-height of the site name, but this won't always match */
+}
+#site-name,
+#site-slogan {
+  display: block;
+  line-height: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0 0 0.1em;
+}
+#branding.with-logo.site-name-hidden.with-site-slogan hgroup,
+#branding.with-logo.site-name-hidden.with-site-slogan hgroup #site-slogan {
+  float: none;
+  display: block;
+  clear: both;
+  padding: 0;
+}
+#branding.with-logo.site-name-hidden.with-site-slogan hgroup #site-slogan {
+  font-size: 1.231em;
+  padding-top: 5px;
+}
+
+#main-content {
+  padding-bottom: 30px;
+}
+.region-content-aside {
+  clear: both;
+  padding: 35px 0 10px;
+}
+
+/* Menu bar */
+#menu-bar {
+  position: relative;
+}
+.nav ul,
+.nav ul li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav .block {
+  margin: 0 5px;
+}
+.nav ul li,
+.nav ul li a {
+  line-height: 2.5em;
+  float: left;
+  display: block;
+}
+.nav ul li a {
+  padding: 0 20px;
+  font-weight: 400;
+}
+.nav ul li a.active,
+.nav ul li.active-trail a {}
+
+.region-header .block  {
+  margin-top: 15px;
+}
+
+/* Superfish Skin */
+.sf-menu a {
+  border: 0;
+}
+
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+  top: 2.5em;
+  margin: 0;
+  padding: 0;
+  line-height: 2.5em;
+}
+.sf-menu li:hover ul ul,
+.sf-menu li.sfHover ul ul{
+  top: 0;
+  margin: 0;
+  line-height: 2.5em;
+}
+.sf-menu li ul li,
+.sf-menu li ul a {
+  line-height: 2.5em;
+}
+.sf-menu li:hover ul li.last a,
+.sf-menu li.sfHover ul li.last a {
+  border-bottom: 0;
+}
+
+#menu-top-wrapper  .block {
+  margin-bottom: 0;
+}
+#menu-top-wrapper  ul {
+  margin: 0;
+  padding: 0;
+}
+#menu-top-wrapper  ul li,
+#menu-top-wrapper a {
+  line-height: 2.5em;
+}
+#menu-top-wrapper a {
+  padding: 0 10px;
+}
+
+
+/* Basic block styles */
+.block {
+  margin-bottom: 20px;
+}
+
+/* Wrapper white space */
+/* Main wrappers */
+#menu-top-wrapper {
+  min-height: 10px;
+}
+#secondary-content-wrapper  {
+  padding: 20px 0 15px;
+}
+#secondary-content-wrapper  .block-inner {
+  padding: 25px 40px;
+}
+#secondary-content-wrapper  .block{
+  margin-bottom: 0;
+}
+#content-wrapper {
+  padding: 20px 0 15px;
+}
+#bi-panels-wrapper {
+  padding: 30px 0 15px;
+}
+#quint-panels-wrapper {
+  padding: 30px 0 15px;
+}
+#tertiary-content-wrapper {
+  padding: 20px 0 15px;
+}
+#page-footer .texture-overlay {
+  padding: 40px 0 10px;
+}
+#footer-panels-wrapper {
+  padding: 0 0 20px;
+}
+#footer-wrapper {
+  padding: 10px 0;
+}
+
+/* Panel specific styling */
+.four-4x25 ul,
+.four-4x25 ul li {
+  list-style: none;
+  list-style-type: none; /* IE6/7 */
+  margin: 0;
+}
+
+/* Fields */
+.field-type-image img {
+}
+.field-label {
+  font-size: 1em;
+}
+article .field {
+}
+.field-type-commerce-price {
+  font-size: 1.538em;
+}
+.field-type-image figure img {
+  -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+  -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+  line-height: 0;
+}
+.field-type-image figure figcaption {
+    font-size: 0.85em;
+    line-height: 2;
+}
+
+/* Articles */
+.article,
+.comment {
+  margin-bottom: 25px;
+}
+article header {
+ position: relative;
+ margin-bottom: 10px;
+ border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.article-type-page header {
+ margin-bottom: 4px;
+ border-bottom: 0;
+}
+.article-title {
+  line-height: 1.4;
+}
+article .submitted {
+  font-size: 0.857em;
+  padding: 0 0 0.6em;
+  margin: 0;
+  position: relative;
+}
+article .article-content {
+  padding: 10px 0;
+}
+article nav {
+  clear: both;
+}
+article ul.links {
+  font-size: 0.923em;
+  text-transform: capitalize;
+  text-align: right;
+  margin: 10px 0;
+  padding: 0;
+}
+article ul.links li {
+  display: inline;
+  list-style: none;
+  margin: 0 0 0 10px;
+}
+article ul.links a {
+  padding: 0;
+}
+.article header.with-picture {
+  height: 3.5em;
+  height: auto !important;
+  min-height: 3.5em;
+  padding-left: 65px;
+}
+.article header .user-picture {
+  background: url(images/transparent-overlay-33.png);
+  left: 0;
+  max-height: 47px;
+  max-width: 47px;
+  overflow: hidden;
+  padding: 2px;
+  position: absolute;
+  top: 0.65em;
+}
+.article header .user-picture img {
+  display: block;
+  margin: 0;
+  max-width: 47px;
+  max-height: 47px;
+}
+
+/* Comments */
+h2.comment-title {
+  margin-bottom: 20px;
+}
+.comment {}
+article.comment header.with-picture {
+  height: 3em;
+  height: auto !important;
+  min-height: 3em;
+  padding-left: 50px;
+}
+article.comment header .user-picture {
+  top: 5px;
+  max-width: 35px;
+  max-height: 35px;
+}
+article.comment header .user-picture img {
+  max-width: 35px;
+  max-height: 35px;
+}
+article .comment-content {
+  padding: 10px 0 0;
+}
+.comment em.new {
+  display: block;
+  float: right;
+  font-style: normal;
+  line-height: 1.3;
+  padding: 0 4px 2px;
+}
+
+/* Blocks */
+.sidebar .block-inner {
+  padding: 0 10px;
+}
+.block-inner {
+  padding: 0 8px;
+}
+.block-title {}
+.block-content {}
+.block ul li a {}
+
+.region-menu-bar-top .block-menu {
+  margin-bottom: 0;
+}
+.region-menu-bar-top .block-menu ul {
+  margin: 0;
+  padding: 0;
+}
+.region-menu-bar-top .block-menu ul li {
+  float: left;
+  display: block;
+  list-style: none;
+}
+#block-comment-recent ul {
+  margin: 0;
+  padding: 0;
+}
+#block-comment-recent ul li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#block-comment-recent ul li span {
+  display: none;
+}
+
+/* Breadcrumb */
+#breadcrumb {
+  margin-bottom: 20px;
+}
+#breadcrumb h2 {
+  font-size: 1em;
+  font-weight: 400;
+  display: inline;
+}
+ol#crumbs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+ol#crumbs li.crumb {
+  display: inline;
+  list-style: none;
+}
+ol#crumbs li.crumb a  {}
+
+
+/* Profile */
+.profile .user-picture {
+  float: none;
+  margin: 0 0 10px;
+}
+
+/* Messages */
+#messages-help-wrapper {
+  margin-bottom: 25px;
+}
+
+/* Tasks */
+#tasks {
+  padding-bottom: 20px;
+  margin: 0 10px;
+}
+ul.action-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Local task tabs */
+ul.primary  {
+  border-bottom: none;
+  text-align: right;
+}
+ul.primary li a {
+  background: none;
+  border: 0;
+  font-weight: 700;
+  padding: 0 8px;
+  margin: 0;
+}
+ul.primary li a:hover {
+  background: none;
+  border: 0;
+}
+ul.primary li a.active,
+ul.primary li.active a {
+  border: 0;
+  background: none;
+  opacity: .95;
+  filter: alpha(opacity = 95);
+}
+ul.primary li a.active:hover,
+ul.primary li a.active:focus {
+  border: 0;
+  background: none;
+  opacity: .95;
+  filter: alpha(opacity = 95);
+}
+ul.secondary li {
+  border-right: 0;
+  line-height: 2em;
+  margin: 0 0 0.5em;
+  padding: 0 1em 0 0;
+}
+
+
+
+/* Collapsible region */
+.js .region-collapsible,
+.collapsible-toggle {
+  display: none;
+}
+.region-collapsible-wrapper {
+  display: none;
+}
+.toggle-active .region-collapsible-wrapper {
+  display: block;
+}
+.section-collapsible,
+.region-highlighted {
+    background: #fff;
+    padding: 1em 0;
+}
+.js .section-collapsible {
+  bottom: 0;
+  height: 50%;
+  height: auto !important;
+  max-height: 50%;
+  position: fixed;
+  right: 0;
+  z-index: 100;
+}
+.section-collapsible.toggle-active {
+  overflow: auto;
+  -moz-box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+.region-collapsible {
+  padding: 15px 30px 15px 15px;
+}
+.region-collapsible  .block {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.js .collapsible-toggle {
+  border: none;
+  display: block;
+  font-size: 1.077em;
+  font-weight: 500;
+  margin: 0;
+  position: relative;
+  text-transform: uppercase;
+}
+.collapsible-toggle a,
+.collapsible-toggle a:visited {
+  background: #fff url(images/black.png) no-repeat 16px -248px;
+  bottom: 0;
+  display: inline-block;
+  height: 20px;
+  padding: 1em;
+  position: fixed;
+  right: 0;
+  text-indent: -999em;
+  width: 20px;
+  z-index: 1;
+  -moz-border-radius: 4px 0 0 0;
+  -webkit-border-radius: 4px 0 0 0;
+  border-radius: 4px 0 0 0;
+  -moz-box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+.toggle-active .collapsible-toggle a {
+  background-position: 16px -390px;
+  position: relative;
+  float: right;
+  -moz-border-radius: 0 0 0 4px;
+  -webkit-border-radius: 0 0 0 4px;
+  border-radius: 0 0 0 4px;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.collapsible-toggle a:hover,
+.collapsible-toggle a:focus,
+.collapsible-toggle a:active {
+  background-image: url(images/gray.png);
+  outline: 0;
+}
+/* Special case the login block */
+.region-collapsible #block-user-login {
+  min-width: 220px;
+}
+.region-collapsible #block-user-login .item-list ul {
+  list-style: none;
+  margin: 0 0 0 2px;
+  padding: 0;
+  font-size: 0.9em;
+}
+.region-collapsible #block-user-login .form-submit {
+  margin-left: 2px;
+}
+
+/* Contextual link reset - be brutal */
+.contextual-links-wrapper .contextual-links {
+  margin: 0 !important;
+  padding: 0.25em 0 !important;
+}
+.contextual-links-wrapper .contextual-links li {
+  display: block !important;
+  float: none !important;
+  line-height: 100% !important;
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.contextual-links-wrapper .contextual-links a {
+  font-family: Arial, sans-serif !important;
+  font-size: small !important;
+  font-weight: 400 !important;
+  font-variant: normal !important;
+  line-height: 1.2em !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  color: #333 !important;
+  display: block !important;
+  float: none !important;
+  margin: 0.25em 0 !important;
+  padding: 0.25em 1em 0.25em 0.5em !important;
+}

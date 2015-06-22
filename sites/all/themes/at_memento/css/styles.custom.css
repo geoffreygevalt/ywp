@@ -1,0 +1,125 @@
+/**
+ * Use this file to provide overrides to the main styles. This file always loads last
+ * so you can override anything in the other style-sheets.
+ *
+ * Usage
+ * 1: Uncomment this file in the themes info file.
+ * 2: Clear the sites cache. See /admin/config/development/performance
+ * 3: Add you styles!
+ */
+
+/* Advanced Slideshow */
+#block-views-nodequeue-2-block .block-inner-2 {
+  background: url(images/hatch5-hoz.png) repeat-y -400px 0;
+  padding-top: 25px;
+}
+#block-views-nodequeue-2-block .ds-2col .group-left {
+  width: 33.333%;
+}
+#block-views-nodequeue-2-block .ds-2col .group-right {
+  width: 66.666%;
+}
+#block-views-nodequeue-2-block .ds-2col .group-right,
+#block-views-nodequeue-2-block .ds-2col .group-left,
+.views_slideshow_cycle_main {
+  /* overflow: hidden; */
+}
+#block-views-nodequeue-2-block  .field-collection-view .entity-field-collection-item,
+#block-views-nodequeue-2-block .field-collection-view .entity-field-collection-item {
+  float: none;
+  width: auto;
+}
+#block-views-nodequeue-2-block .ds-2col .group-left .field {
+  padding: 10px 15px;
+  margin: 0;
+  display: block;
+}
+#block-views-nodequeue-2-block .field-collection-container,
+#block-views-nodequeue-2-block .field-collection-view,
+#block-views-nodequeue-2-block .field-type-image,
+#block-views-nodequeue-2-block .field-type-image figure {
+  border-bottom: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#block-views-nodequeue-2-block .views-slideshow-cycle-main-frame-row {
+  /* position: relative !important; */
+}
+
+
+
+/* Front page features views block */
+.view-front-page-features ul,
+.view-front-page-features ul li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.view-front-page-features .views-row {
+  width: 33.333%;
+  float: left;
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.view-front-page-features .views-row-1 {
+  padding: 0 16px 0 0;
+}
+.view-front-page-features .views-row-2 {
+  padding: 0 8px;
+}
+.view-front-page-features .views-row-3 {
+  padding: 0 0 0 16px;
+}
+.view-front-page-features .views-row img {
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.ie6-7 .view-front-page-features .views-row {
+  width: 31%;
+  margin: 1%;
+  padding: 0 !important;
+}
+.ie6-7 .view-front-page-features .views-row-1 {
+  margin-left: 1.5%;
+}
+.ie6-7.view-front-page-features .views-row-3 {
+  margin-right: 1.5%;
+}
+
+/* Front page Content */
+.page-features-offset-3 .views-row {
+  width: 49%;
+  margin: 0;
+  float: left;
+  overflow: hidden;
+}
+.page-features-offset-3 .views-row-2 {
+  float: right;
+}
+.view-front-page-features .views-row img {
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

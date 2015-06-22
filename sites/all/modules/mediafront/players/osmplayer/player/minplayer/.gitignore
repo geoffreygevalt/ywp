@@ -1,0 +1,7 @@
+.DS_Store
+tools
+*.as
+*.fla
+node_modules
+flash/skins/goldstandard
+flash/skins/shockblack

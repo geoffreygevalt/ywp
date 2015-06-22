@@ -1,0 +1,32 @@
+name = Statuses Micropublisher
+description = Allows users to easily publish various kinds of content (links, photos, videos, etc) in a stream like on Facebook. Google+.
+core = 7.x
+package = Statuses
+configure = admin/config/fbsmp
+dependencies[] = statuses
+dependencies[] = ctools
+files[] = fbsmp.admin.inc
+files[] = fbsmp.install
+files[] = fbsmp.module
+files[] = fbsmp.plugins.inc
+files[] = fbsmp.rules.inc
+files[] = fbsmp.rules_defaults.inc
+files[] = fbsmp.views.inc
+files[] = fbsmp_views_handler_field_themed_attachment.inc
+files[] = fbsmp_views_handler_filter_empty_status_attachment.inc
+files[] = libraries/ffmpeg.inc
+files[] = libraries/file.inc
+files[] = libraries/url_to_absolute.inc
+files[] = plugins/link.emaudio.inc
+files[] = plugins/link.emvideo.inc
+files[] = plugins/link.inc
+files[] = plugins/photo.inc
+files[] = plugins/slideshare.inc
+files[] = plugins/video.inc
+
+; Information added by Drupal.org packaging script on 2015-02-22
+version = "7.x-1.0-alpha1+3-dev"
+core = "7.x"
+project = "fbsmp"
+datestamp = "1424642883"
+

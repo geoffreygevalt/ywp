@@ -1,0 +1,92 @@
+/*
+ *   Important Information about this CSS File
+ *
+ * - Do not delete or rename this file, if you do not use it leave it blank (delete
+ *   everything) and the file will be skipped when you enable Production Mode in
+ *   the Global theme settings.
+ *
+ * - Read the _README file in this directory, it contains useful help and other information.
+ */
+
+#header-wrapper,
+#header-wrapper.with-header-region  {
+  padding: 15px 0 0;
+}
+
+#secondary-content-wrapper .block-content  .image-right,
+#secondary-content-wrapper .block-content  .image-left,
+#secondary-content-wrapper .block-content  .field-type-image,
+#secondary-content-wrapper .block-content  figure  {
+  max-width: 50%;
+}
+
+#secondary-content-wrapper .block-content img {
+  max-width: 100%;
+}
+
+#menu-wrapper {
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+  clear: both;
+  float: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hl-l #branding {
+  margin: 15px 20px 0 0;
+}
+
+.hl-c #branding {
+  margin: 15px 0 0 0;
+}
+
+.hl-r #branding {
+  margin: 15px 0 0 20px;
+}
+
+.hl-l #menu-wrapper,
+.hl-c #menu-wrapper,
+.hl-r #menu-wrapper {
+  margin: 15px 0 0;
+}
+
+.region-content-aside {
+  padding: 35px 15px 10px;
+}
+
+.view-front-page-features .views-row-1,
+.view-front-page-features .views-row-2 {
+  width: 50%;
+}
+
+.view-front-page-features .views-row-3 {
+  width: 100%;
+  float: none;
+  clear: both;
+  padding-top: 20px;
+}
+
+.group-left,
+.group-right {
+  float: none;
+}
+
+#block-views-nodequeue-2-block .ds-2col .group-left,
+#block-views-nodequeue-2-block .ds-2col .group-right {
+  width: 100%;
+}
+
+#block-views-nodequeue-2-block .block-inner-2 {
+  background: url("images/hatch5-hoz.png") repeat-y scroll 0 0 rgba(0, 0, 0, 0);
+  padding-top: 25px;
+}
+
+#secondary-content-wrapper .block-content .image-right,
+#secondary-content-wrapper .block-content .image-left,
+#secondary-content-wrapper .block-content .field-type-image,
+#secondary-content-wrapper .block-content figure {
+    max-width: 100%;
+}
+

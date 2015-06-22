@@ -1,0 +1,122 @@
+/*
+ * NOTICE: This is a commercial Drupal theme. Elements of this theme including this field
+ * are licensed under a standard commercial license which does not permit redistribution. 
+ */
+html {
+  background-color: #e1e1e1;
+}
+body {
+  background: #fbfbfb;
+  color: #767676;
+}
+
+/* Main wrappers */
+#menu-top-wrapper {
+  background: #323232;
+  color: #fefefe;
+}
+#menu-top-wrapper a {
+  color: #ffffff;
+}
+#secondary-content-wrapper .block-inner{
+  background-color: #b0b6c2;
+  color: #777777;
+}
+#secondary-content-wrapper .container a {
+  color: #7c869c;
+}
+#page-footer {
+  background-color: #e1e1e1;
+}
+#header-wrapper header,
+#tertiary-content-wrapper .container,
+#main-content {
+  border-bottom: 1px solid #d5d5d5;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Links */
+a:link,
+a:visited,
+a:active,
+a.active {
+  color: #333333;
+}
+a:hover,
+a:focus {
+  color: #434343;
+}
+
+/* Header */
+#site-name a {
+  color: #313131;
+}
+#site-slogan {
+  color: #444444;
+}
+
+.region-header .block a,
+.region-header .block-menu a,
+.region-header .block .item-list a {}
+.region-header #block-user-login label,
+.region-header #search-block-form .form-submit {}
+
+/* Menu bar */
+.nav ul li a:link,
+.nav ul li a:visited {
+  color: #666666;
+
+}
+.nav ul li a:hover,
+.nav ul li a:focus,
+.nav  ul li a:active {
+  color: #fefefe;
+  background: #b0b6c3;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+  -moz-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+
+/* Superfish Skin */
+.sf-menu li:hover ul a,
+.sf-menu li.sfHover ul a {
+  background: #b0b6c3;
+  border-bottom: 1px solid #ffffff;
+  opacity: .95;
+  filter: alpha(opacity = 95);
+  
+}
+
+/* Books */
+.book-navigation .page-links {
+  border-bottom: 1px solid #d5d5d5;
+  border-top: 1px solid #d5d5d5;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+.book-navigation .menu {
+  border-color: #d5d5d5;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* HTML elements */
+blockquote {}
+hr {}
+
+/* Tables */
+tr.even {}
+tbody tr:nth-child(2n+1),
+tr.odd {}
+
+/* Form */
+input.form-text,
+textarea,
+select {
+  border: 1px solid #d5d5d5;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+#search-block-form input.form-text,
+#search-block-form input::-webkit-input-placeholder,
+#search-block-form input:-moz-placeholder {}
