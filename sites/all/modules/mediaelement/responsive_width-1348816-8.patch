@@ -1,0 +1,45 @@
+diff --git a/mediaelement.field.inc b/mediaelement.field.inc
+--- a/mediaelement.field.inc
++++ b/mediaelement.field.inc
+@@ -53,13 +53,13 @@
+   );
+ 
+   $element['width'] = array(
+-    '#title' => t('Width'),
++    '#title' => t('Width (Specify using px or 100%)'),
+     '#type' => 'textfield',
+     '#default_value' => $settings['width'],
+   );
+ 
+   $element['height'] = array(
+-    '#title' => t('Height'),
++    '#title' => t('Height (Specify using px or 100%)'),
+     '#type' => 'textfield',
+     '#default_value' => $settings['height'],
+   );
+@@ -85,7 +85,7 @@
+ function mediaelement_field_formatter_settings_summary($field, $instance, $view_mode) {
+   $display = $instance['display'][$view_mode];
+   $settings = $display['settings'];
+-  return t('Width: @width px, Height: @height px', array('@width' => $settings['width'], '@height' => $settings['height']));
++  return t('Width: @width, Height: @height', array('@width' => $settings['width'], '@height' => $settings['height']));
+ }
+ 
+ /**
+@@ -106,12 +106,12 @@
+     $js_settings['opts'] = array();
+     $js_settings['controls'] = (bool)$settings['controls'];
+     if ($display['type'] == 'mediaelement_video') {
+-      $js_settings['opts']['videoHeight'] = (int)$settings['height'];
+-      $js_settings['opts']['videoWidth'] = (int)$settings['width'];
++      $js_settings['opts']['videoHeight'] = $settings['height'];
++      $js_settings['opts']['videoWidth'] = $settings['width'];
+     }
+     elseif ($display['type'] == 'mediaelement_audio') {
+-      $js_settings['opts']['audioHeight'] = (int)$settings['height'];
+-      $js_settings['opts']['audioWidth'] = (int)$settings['width'];
++      $js_settings['opts']['audioHeight'] = $settings['height'];
++      $js_settings['opts']['audioWidth'] = $settings['width'];
+     }
+ 
+     $class = 'mediaelement-formatter-identifier-' . time() . '-' . $id++;
