@@ -1,0 +1,6 @@
+name = YWP Annotator
+description = Customize Annotator module
+package = YWP
+core = 7.x
+
+dependencies[] = annotator

@@ -1,0 +1,17 @@
+<?php
+/**
+ * @file
+ * Tweaks to annotator module
+ */
+
+
+/**
+ * Implements hook_init().
+ *
+ * if user can't create annotations, add the disable annotator script.
+ */
+function ywp_annotator_init() {
+  if (user_access('view annotations') && !user_access('create annotations')) {
+    drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
+  }
+}
