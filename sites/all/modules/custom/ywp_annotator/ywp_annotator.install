@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function ywp_annotator_install() {
+  // annotate blog content by default only.
+  variable_set('annotator_element', '.node-blog');
+}
