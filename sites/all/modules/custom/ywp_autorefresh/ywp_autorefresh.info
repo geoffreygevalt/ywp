@@ -1,0 +1,4 @@
+name = Autorefresh
+description = Autorefresh statuses for interactive comments
+core = 7.x
+package = YWP

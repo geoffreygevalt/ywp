@@ -1,0 +1,11 @@
+<?php
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function ywp_autorefresh_views_pre_render(&$view) {
+  if ($view->name === 'statuses_stream') {
+    drupal_add_js(drupal_get_path('module', 'ywp_autorefresh') . '/js/statuses_autorefresh.js');
+  }
+}
