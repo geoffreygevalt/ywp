@@ -29,3 +29,23 @@ function ywp_write_field_attach_view_alter(&$output, $context) {
     $output['body'][0]['#attached']['css'][] = $css;
   }
 }
+
+/**
+ * Implements hook_node_view().
+ */
+function ywp_write_node_view($node, $view_mode, $langcode) {
+  if ($node->type == 'blog') {
+    $node->content['links']['blog']['#links']['ywp_write'] = array(
+      'title' => t('Sprout'),
+      'href' => 'node/add/blog',
+      'query' => array(
+        'field_ywp_sprout' => $node->nid,
+      ),
+      'attributes' => array(),
+    );
+  }
+
+
+  return $node;
+}
+

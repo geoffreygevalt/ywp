@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * Implements hook_install().
+ *
+ * Create the entityreference field on blog content type.
+ */
+function ywp_write_install() {
+  $field_id = 'field_ywp_sprout';
+  // Check if our field is not already created.
+  if (!field_info_field($field_id)) {
+    // Create the field base.
+    $field = array(
+      'field_name' => $field_id,
+      'type' => 'entityreference',
+      'settings' => array(
+        'target_type' => 'node',
+        'handler' => 'base',
+        'handler_settings' => array(
+          'target_bundles' => array(
+            'blog' => 'blog',
+          ),
+        ),
+      ),
+    );
+    field_create_field($field);
+
+    // Create the field instance on the bundle.
+    $instance = array(
+      'field_name' => $field_id,
+      'entity_type' => 'node',
+      'bundle' => 'blog',
+      'label' => 'Sprouted from',
+      'settings' => array(
+        'behaviors' => array(
+          'prepopulate' => array(
+            'status' => 1,
+            'action' => 'hide',
+            'action_on_edit' => 1,
+            'fallback' => 'hide',
+            'providers' => array('url' => 1),
+          ),
+         ),
+        'entityreference_link' => array('enabled' => 1),
+      ),
+      'widget' => array(
+        'type' => 'options_select',
+      ),
+    );
+    field_create_instance($instance);
+  }
+}
