@@ -7,20 +7,19 @@
 
   "use strict";
 
-  // Time in seconds.
-  var authUpdateDelay = 20;
+  var activeTime;
+  // Time in seconds before refreshing comments.
+  var authDelay;
   // This value is half of 'cache_lifetime'.
-  var anonUpdateDelay;
+  var anonDelay;
+  // Increased delay when no updates.
+  var waitingDelay;
 
   var timer;
-  var delay;
-  // Increased delay when no updates.
-  var slowDelay;
   var refreshIDs = ['.view-id-statuses_stream'];
   var loaded = {};
-  // When 5 consecutive updates have no new content, increase delay.
-  var timesNotUpdated = 0;
-
+  // if no content within 1 minute, use the 'waiting' delay.
+  var lastContentUpdate = new Date();
 
   function updateView(viewID, new_content) {
 
@@ -37,10 +36,7 @@
         Drupal.detachBehaviors($el);
         $el.replaceWith($this);
         Drupal.attachBehaviors($this);
-        timesNotUpdated = 0;
-      }
-      else {
-        timesNotUpdated++;
+        lastContentUpdate = new Date();
       }
     }
 
@@ -87,22 +83,37 @@
     $.get(location, parsePage);
   }
 
+  function getDelay() {
+    var delay;
+    var isAuth = $('body').hasClass('logged-in');
+    var timeOffset = new Date() - lastContentUpdate;
+
+    if (timeOffset < activeTime * 1000) {
+      delay = isAuth ? authDelay : anonDelay;
+    }
+    else {
+      delay = waitingDelay;
+    }
+    console.log(delay);
+    return delay * 1000;
+  }
+
   function refresh() {
-    var actualDelay = timesNotUpdated < 5 ? delay : slowDelay;
     if (timer) {
       window.clearTimeout(timer);
     }
     refreshComments();
     // console.log('refresh', (actualDelay/1000), timesNotUpdated);
-    timer = window.setTimeout(refresh, actualDelay);
+    timer = window.setTimeout(refresh, getDelay());
   }
 
   // Don't use behaviors since we want that bound only once!
   $(document).ready(function (context) {
-    anonUpdateDelay = Math.max(60, Drupal.settings.ywp_autorefresh.anon) / 2;
-    delay = $('body').hasClass('logged-in') ? authUpdateDelay : anonUpdateDelay;
-    delay = delay * 1000;
-    slowDelay = delay * 5;
+    var settings = Drupal.settings.ywp_autorefresh;
+    activeTime = Math.max(60, +settings.activeTime);
+    authDelay = Math.max(5, +settings.auth);
+    anonDelay = Math.max(20, +settings.anon);
+    waitingDelay = Math.max(anonDelay, +settings.waiting);
     refresh();
   });
 
