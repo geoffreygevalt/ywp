@@ -29,7 +29,8 @@
       // Existing content.
       var $el = $element.eq(index);
 
-      var changed = $this.text() !== $el.text();
+      // Only look at the actual content of the comments, no metadata.
+      var changed = $this.find('.statuses-content').text() !== $el.find('.statuses-content').text();
       // Only update the view if the number of rows is different (meaning a
       // comment was added/removed).
       if (changed) {
@@ -73,11 +74,11 @@
     // Reset all seen views.
     loaded = {};
     // Refresh elements by re-loading the current page and replacing the old version with the updated version.
-    var location = window.location.pathname + '?';
+    var location = window.location.pathname;
     // Build the relative URL with query parameters.
     var query = window.location.search.substring(1);
     if ($.trim(query) !== '') {
-      location += query + '&';
+      location += '?' + query + '&';
     }
     // IE will cache the result unless we add an identifier (in this case, the time).
     $.get(location, parsePage);
@@ -94,7 +95,6 @@
     else {
       delay = waitingDelay;
     }
-    console.log(delay);
     return delay * 1000;
   }
 
@@ -103,7 +103,6 @@
       window.clearTimeout(timer);
     }
     refreshComments();
-    // console.log('refresh', (actualDelay/1000), timesNotUpdated);
     timer = window.setTimeout(refresh, getDelay());
   }
 
@@ -114,7 +113,22 @@
     authDelay = Math.max(5, +settings.auth);
     anonDelay = Math.max(20, +settings.anon);
     waitingDelay = Math.max(anonDelay, +settings.waiting);
-    refresh();
+
+    // If we click on 'Share', reset the active counter.
+    var $element = $('input.statuses-submit');
+    if (Drupal.settings.ajax && Drupal.settings.ajax[$element[0].id]) {
+      $element.bind(Drupal.settings.ajax[$element[0].id].event, function () {
+        lastContentUpdate = new Date();
+        // Don't refresh just now, the ajax stuff already updated the page,
+        // wait for next tick.
+        if (timer) {
+          window.clearTimeout(timer);
+        }
+        timer = window.setTimeout(refresh, getDelay());
+      });
+    }
+
+    timer = window.setTimeout(refresh, getDelay());
   });
 
 })(Drupal, jQuery);
