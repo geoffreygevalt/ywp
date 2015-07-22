@@ -7,5 +7,6 @@
 function ywp_autorefresh_views_pre_render(&$view) {
   if ($view->name === 'statuses_stream') {
     drupal_add_js(drupal_get_path('module', 'ywp_autorefresh') . '/js/statuses_autorefresh.js');
+    drupal_add_js(array('ywp_autorefresh' => array('anon' => (int) variable_get('cache_lifetime', 60))), 'setting');
   }
 }

@@ -7,8 +7,10 @@
 
   "use strict";
 
-  var anonUpdateDelay = 40 * 1000;
-  var authUpdateDelay = 20 * 1000;
+  // Time in seconds.
+  var authUpdateDelay = 20;
+  // This value is half of 'cache_lifetime'.
+  var anonUpdateDelay;
 
   var timer;
   var delay;
@@ -91,13 +93,15 @@
       window.clearTimeout(timer);
     }
     refreshComments();
-    //console.log('refresh', (actualDelay/1000), timesNotUpdated);
+    // console.log('refresh', (actualDelay/1000), timesNotUpdated);
     timer = window.setTimeout(refresh, actualDelay);
   }
 
   // Don't use behaviors since we want that bound only once!
   $(document).ready(function (context) {
+    anonUpdateDelay = Math.max(60, Drupal.settings.ywp_autorefresh.anon) / 2;
     delay = $('body').hasClass('logged-in') ? authUpdateDelay : anonUpdateDelay;
+    delay = delay * 1000;
     slowDelay = delay * 5;
     refresh();
   });
