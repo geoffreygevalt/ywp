@@ -1,0 +1,27 @@
+<?php
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function ywp_autorefresh_views_pre_render(&$view) {
+  if ($view->name === 'statuses_stream') {
+    $settings = array(
+      // Length of time where updates are frequent. After this time with no new
+      // content, period between refresh will switch to 'waiting' length.
+      'activeTime' => 60,
+
+      // For auth users, check every 'auth' seconds during 'activeTime'.
+      'auth' => 20,
+
+      // For anon users, check every 'anon' seconds during 'activeTime'.
+      'anon' => (int) variable_get('cache_lifetime', 60) / 2,
+
+      // When there hasn't been new updates during 'activeTime',
+      // check only every 'waiting' seconds.
+      'waiting' => 90,
+    );
+    drupal_add_js(drupal_get_path('module', 'ywp_autorefresh') . '/js/statuses_autorefresh.js');
+    drupal_add_js(array('ywp_autorefresh' => $settings), 'setting');
+  }
+}
