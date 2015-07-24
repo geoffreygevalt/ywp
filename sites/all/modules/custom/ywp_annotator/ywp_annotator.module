@@ -1,0 +1,30 @@
+<?php
+/**
+ * @file
+ * Tweaks to annotator module
+ */
+
+
+/**
+ * Implements hook_init().
+ *
+ * if user can't create annotations, add the disable annotator script.
+ */
+function ywp_annotator_init() {
+  if (user_access('view annotations') && !user_access('create annotations')) {
+    drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
+  }
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function ywp_annotator_js_alter(&$javascript) {
+  $old_path = drupal_get_path('module', 'annotator') . '/js/annotator_permissions.js';
+  $new_path = drupal_get_path('module', 'ywp_annotator') . '/js/annotator_permissions.js';
+  // Cheat by only changing the data value, not the key, which still refers to
+  // the old js file.
+  if (!empty($javascript[$old_path])) {
+    $javascript[$old_path]['data'] = $new_path;
+  }
+}
