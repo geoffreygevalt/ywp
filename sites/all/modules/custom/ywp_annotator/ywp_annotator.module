@@ -11,8 +11,32 @@
  * if user can't create annotations, add the disable annotator script.
  */
 function ywp_annotator_init() {
+  global $user;
   if (user_access('view annotations') && !user_access('create annotations')) {
     drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
+  }
+
+
+  // Don't load the annotator_store.js file if the user can't see annotations,
+  // prevent an error message from showing up.
+  if (user_access('view own annotations') && !user_access('view annotations')) {
+    if ($node = menu_get_object()) {
+      // It's not his node.
+      if ($node->uid != $user->uid) {
+        drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/restrict-own-annotations.js');
+      }
+      // It's his node, load all the libraries so that annotations can be read.
+      else {
+        // copied from annotation_init().
+        $library = libraries_load('annotator');
+        if ($library['loaded'] == FALSE) {
+          drupal_set_message($library['error message'], 'error');
+        }
+        drupal_add_js(array('annotator' => array('element' => variable_get('annotator_element', '.node'))), 'setting');
+        drupal_add_js(drupal_get_path('module', 'annotator') . '/js/annotator.js');
+        annotator_execute_plugins();
+      }
+    }
   }
 }
 
