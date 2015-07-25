@@ -1,6 +1,8 @@
 /**
  * @file
- * Disable Annotator annotation creation widget.
+ * Disable the storage plugin.
+ *
+ * Avoid an ajax request on nodes where the user is not author.
  */
 (function (Drupal) {
 

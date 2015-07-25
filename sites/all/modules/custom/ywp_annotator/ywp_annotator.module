@@ -21,11 +21,11 @@ function ywp_annotator_init() {
   // prevent an error message from showing up.
   if (user_access('view own annotations') && !user_access('view annotations')) {
     if ($node = menu_get_object()) {
-      // It's not his node.
+      // It's not the node author.
       if ($node->uid != $user->uid) {
         drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/restrict-own-annotations.js');
       }
-      // It's his node, load all the libraries so that annotations can be read.
+      // It's the node author, load all the libraries so that annotations can be read.
       else {
         // copied from annotation_init().
         $library = libraries_load('annotator');
