@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function ywp_autorefresh_install() {
+  ywp_autorefresh_update_7001();
+}
+
+/**
+ * Configure pages on which to enable nodejs refresh.
+ */
+function ywp_autorefresh_update_7001() {
+  variable_set('nodejs_service_key', 'ywpnodejskey');
+  variable_set('nodejs_pages', 'node/*
+  user
+  user/*');
+}

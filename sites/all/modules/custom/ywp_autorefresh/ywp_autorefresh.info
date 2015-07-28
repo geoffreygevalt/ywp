@@ -1,4 +1,8 @@
 name = Autorefresh
-description = Autorefresh statuses for interactive comments
+description = Configuration for nodejs statuses and comments integration.
 core = 7.x
 package = YWP
+
+dependencies[] = views_nodejs
+dependencies[] = rules
+dependencies[] = nodejs
