@@ -11,8 +11,32 @@
  * if user can't create annotations, add the disable annotator script.
  */
 function ywp_annotator_init() {
+  global $user;
   if (user_access('view annotations') && !user_access('create annotations')) {
     drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
+  }
+
+
+  // Don't load the annotator_store.js file if the user can't see annotations,
+  // prevent an error message from showing up.
+  if (user_access('view own annotations') && !user_access('view annotations')) {
+    if ($node = menu_get_object()) {
+      // It's not the node author.
+      if ($node->uid != $user->uid) {
+        drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/restrict-own-annotations.js');
+      }
+      // It's the node author, load all the libraries so that annotations can be read.
+      else {
+        // copied from annotation_init().
+        $library = libraries_load('annotator');
+        if ($library['loaded'] == FALSE) {
+          drupal_set_message($library['error message'], 'error');
+        }
+        drupal_add_js(array('annotator' => array('element' => variable_get('annotator_element', '.node'))), 'setting');
+        drupal_add_js(drupal_get_path('module', 'annotator') . '/js/annotator.js');
+        annotator_execute_plugins();
+      }
+    }
   }
 }
 
@@ -27,4 +51,114 @@ function ywp_annotator_js_alter(&$javascript) {
   if (!empty($javascript[$old_path])) {
     $javascript[$old_path]['data'] = $new_path;
   }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function ywp_annotator_menu_alter(&$items) {
+  if (module_exists('annotation')) {
+    $items['annotation/api/search']['page callback'] = 'ywp_annotator_api_search_restrict';
+
+    // Fix permissions
+    $items['annotation/api/annotations']['access callback'] = 'ywp_annotator_access';
+    $items['annotation/api/annotations']['access arguments'] = array('endpoint');
+
+    $items['annotation/api/annotations/%']['access callback'] = 'ywp_annotator_access';
+    $items['annotation/api/annotations/%']['access arguments'] = array('view');
+
+    $items['annotation/api/search']['access callback'] = 'ywp_annotator_access';
+    $items['annotation/api/search']['access arguments'] = array('search');
+  }
+}
+
+/**
+ * Implement access rules for annotations.
+ *
+ * Don't display everything to everyone.
+ */
+function ywp_annotator_access($type) {
+  global $user;
+  if (user_access('administer annotations')) {
+    return TRUE;
+  }
+
+  if ($type == 'create') {
+    return user_access('create annotations');
+  }
+  elseif ($type == 'view') {
+    return user_access('view annotations') || user_access('view own annotations');
+  }
+  elseif ($type == 'endpoint') {
+    return ywp_annotator_access('view') || ywp_annotator_access('create');
+  }
+  elseif ($type == 'search') {
+    // Make sure that node authors can view annotation on their content only.
+    if (user_access('view own annotations')) {
+      if ($url = parse_url($_GET['uri'])) {
+        $path = substr($url['path'], 1);
+        if ($current_node = menu_get_object('node', 1, $path)) {
+          return $current_node->uid == $user->uid;
+        }
+      }
+    }
+    else {
+      return user_access('view annotations');
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function ywp_annotator_permission() {
+  return array(
+    'view own annotations' => array(
+      'title' => t('View own annotations'),
+      'description' => t('Allows users to view annotations from any user on their OWN CONTENT.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Copy of annotation_api_search adding restriction on user.
+ */
+function ywp_annotator_api_search_restrict() {
+  $records = array();
+  $limit = isset($_GET['limit']) ? $_GET['limit'] : 20;
+  $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
+  $uri = isset($_GET['uri']) ? $_GET['uri'] : NULL;
+
+  // Initiate query
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'annotation');
+  if ($uri) {
+    $query->propertyCondition('uri', $uri);
+  }
+  // Get the total
+  $count_query = clone $query;
+  $total = $count_query->count()->execute();
+  // Set query range
+  if ($limit > 0) {
+    $query->range($offset, $limit);
+  }
+  $result = $query->execute();
+
+  if (isset($result['annotation'])) {
+    $annotation_items_nids = array_keys($result['annotation']);
+    $records = entity_load_multiple_by_name('annotation', $annotation_items_nids);
+  }
+
+  foreach ($records as $rid => $record) {
+    $records[$rid] = annotation_api_entity_prepare($record, 'read');
+  }
+
+  $output = array(
+    'total' => $total,
+    'rows' => array_values($records),
+  );
+  return drupal_json_output($output);
 }
