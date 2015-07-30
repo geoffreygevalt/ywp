@@ -4,7 +4,7 @@
 */
 backendSettings = {
   "scheme":"http",
-  "host":"localhost",
+  "host":"",
   "port":8080,
   "key":"/path/to/key/file",
   "cert":"/path/to/cert/file",
