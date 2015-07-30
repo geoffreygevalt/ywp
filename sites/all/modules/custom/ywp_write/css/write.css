@@ -1,0 +1,16 @@
+.ywp-write,
+.ywp-write button {
+  font-weight: bold;
+}
+
+.ywp-write-button {
+  text-align: center;
+}
+
+.ywp-write-button button {
+  font-size: 18px;
+}
+
+.ywp-write span {
+  font-style: italic;
+}

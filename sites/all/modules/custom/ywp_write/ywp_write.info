@@ -1,0 +1,4 @@
+name = Write
+description = Add Write buttons and Sprout feature.
+core = 7.x
+package = YWP

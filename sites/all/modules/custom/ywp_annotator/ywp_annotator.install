@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function ywp_annotator_install() {
+  ywp_annotator_update_7001();
+}
+
+/**
+ * Remove unnecessary checkboxes from annotator widget and restrict annotation
+ * to blog body.
+ */
+function ywp_annotator_update_7001() {
+  variable_set('annotator_element', '.node-type-blog .node-blog.node-full .node-content');
+  variable_set('annotator_permissions', array(
+    'showViewPermissionsCheckbox' => FALSE,
+    'showEditPermissionsCheckbox' => FALSE,
+  ));
+}
