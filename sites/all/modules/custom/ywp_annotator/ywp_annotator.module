@@ -16,7 +16,6 @@ function ywp_annotator_init() {
     drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
   }
 
-
   // Don't load the annotator_store.js file if the user can't see annotations,
   // prevent an error message from showing up.
   if (user_access('view own annotations') && !user_access('view annotations')) {
@@ -26,7 +25,8 @@ function ywp_annotator_init() {
         drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/restrict-own-annotations.js');
       }
       // It's the node author, load all the libraries so that annotations can be read.
-      else {
+      // Make sure the user doesn't have rights that would already add those files!
+      else if (!user_access('administer annotations') && !user_access('view annotations') && !user_access('create annotations')) {
         // copied from annotation_init().
         $library = libraries_load('annotator');
         if ($library['loaded'] == FALSE) {
