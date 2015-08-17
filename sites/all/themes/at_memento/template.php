@@ -86,7 +86,19 @@ function at_memento_process_page(&$vars) {
   $branding_classes[] = $vars['site_slogan'] ? 'with-site-slogan' : 'no-slogan';
   $vars['branding_classes'] = implode(' ', $branding_classes);
 }
-
+/**
+ * This provides block titlelink functionality to panels
+*/
+function mytheme_preprocess_panels_pane(&$vars, &$pane) {
+  if($vars['pane']->type == "block") {
+    $subtype = $vars['pane']->subtype;
+    $bt_delta = 'block_titlelink_' . preg_replace('/\-/', '_', $subtype, 1);
+    $bt_vars = variable_get($bt_delta);
+    if(!empty($bt_vars) && !empty($bt_vars['url']) && !empty($bt_vars['display'])) {
+      $vars['title'] = l($vars['title'], $bt_vars['url'], array('html' => true));
+    }
+  }
+}
 /**
  * Override or insert variables into the node template.
  */
@@ -185,6 +197,20 @@ function at_memento_breadcrumb($vars) {
     }
   }
   return '';
+}
+
+/**
+ * This provides block titlelink functionality to panels
+*/
+function at_memento_preprocess_panels_pane(&$vars, &$pane) {
+  if($vars['pane']->type == "block") {
+    $subtype = $vars['pane']->subtype;
+    $bt_delta = 'block_titlelink_' . preg_replace('/\-/', '_', $subtype, 1);
+    $bt_vars = variable_get($bt_delta);
+    if(!empty($bt_vars) && !empty($bt_vars['url']) && !empty($bt_vars['display'])) {
+      $vars['title'] = l($vars['title'], $bt_vars['url'], array('html' => true));
+    }
+  }
 }
 
 /**

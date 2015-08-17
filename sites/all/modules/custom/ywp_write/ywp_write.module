@@ -12,7 +12,10 @@
  * panels, without the need to add anything else.
  */
 function ywp_write_field_attach_view_alter(&$output, $context) {
-  if ($context['entity_type'] == 'node' && ($context['entity']->type == 'challenge' || $context['entity']->type == 'project')) {
+  if ($context['entity_type'] == 'node'
+    && ($context['entity']->type == 'challenge' || $context['entity']->type == 'project')
+    && !empty($output['body'])) {
+
     $node = $context['entity'];
     $css = drupal_get_path('module', 'ywp_write') . '/css/write.css';
 

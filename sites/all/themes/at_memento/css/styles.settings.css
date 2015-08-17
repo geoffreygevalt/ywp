@@ -55,7 +55,7 @@ body.page-taxonomy.tpcc-8 #block-system-main article.article {
 /* HL - Left */
 .hl-l #branding {
   float: left;
-  margin: 65px 20px 0 0;
+  margin: 35px 20px 0 0;
 }
 .hl-l #logo {
   margin: 0;
@@ -63,7 +63,7 @@ body.page-taxonomy.tpcc-8 #block-system-main article.article {
 }
 .hl-l #menu-wrapper {
   float: right;
-  margin: 65px 0 0 0;
+  margin: 28px 0 0 0;
 }
 /* HL - Right */
 .hl-r #branding {
