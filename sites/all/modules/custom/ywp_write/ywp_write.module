@@ -12,8 +12,9 @@
  * panels, without the need to add anything else.
  */
 function ywp_write_field_attach_view_alter(&$output, $context) {
+  $content_types = array('challenge', 'project', 'lab');
   if ($context['entity_type'] == 'node'
-    && ($context['entity']->type == 'challenge' || $context['entity']->type == 'project')
+    && in_array($context['entity']->type, $content_types)
     && !empty($output['body'])) {
 
     $node = $context['entity'];
