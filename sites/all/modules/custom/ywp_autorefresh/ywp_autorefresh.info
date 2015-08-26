@@ -3,6 +3,8 @@ description = Configuration for nodejs statuses and comments integration.
 core = 7.x
 package = YWP
 
+scripts[] = ywp_autorefresh.js
+
 dependencies[] = views_nodejs
 dependencies[] = rules
 dependencies[] = nodejs
