@@ -13,7 +13,7 @@ backendSettings = {
   "serviceKey":"ywpnodejskey",
   "backend":{
     "port":80,
-    "host":"ywpvt.org",
+    "host":"youngwritersproject.org",
     "messagePath":"/nodejs/message"
   },
   "clientsCanWriteToChannels":false,
