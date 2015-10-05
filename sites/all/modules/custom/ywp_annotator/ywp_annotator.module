@@ -12,10 +12,6 @@
  */
 function ywp_annotator_init() {
   global $user;
-  if (user_access('view annotations') && !user_access('create annotations')) {
-    drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
-  }
-
   // Don't load the annotator_store.js file if the user can't see annotations,
   // prevent an error message from showing up.
   if (user_access('view own annotations') && !user_access('view annotations')) {
@@ -37,6 +33,10 @@ function ywp_annotator_init() {
         annotator_execute_plugins();
       }
     }
+  }
+
+  if (!user_access('create annotations')) {
+    drupal_add_js(drupal_get_path('module', 'ywp_annotator') . '/js/disable-annotator-adder.js');
   }
 }
 
@@ -94,7 +94,7 @@ function ywp_annotator_access($type) {
   }
   elseif ($type == 'search') {
     // Make sure that node authors can view annotation on their content only.
-    if (user_access('view own annotations')) {
+    if (user_access('view own annotations') && !user_access('view annotations')) {
       if ($url = parse_url($_GET['uri'])) {
         $path = substr($url['path'], 1);
         if ($current_node = menu_get_object('node', 1, $path)) {
