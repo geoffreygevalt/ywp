@@ -1,0 +1,13 @@
+name = Subscriptions
+description = The basic Subscriptions framework.
+package = "Subscriptions"
+core = 7.x
+
+configure = admin/config/system/subscriptions
+
+; Information added by Drupal.org packaging script on 2015-06-19
+version = "7.x-1.1+28-dev"
+core = "7.x"
+project = "subscriptions"
+datestamp = "1434754985"
+
