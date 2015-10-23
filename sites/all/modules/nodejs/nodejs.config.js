@@ -19,7 +19,7 @@ backendSettings = {
   "clientsCanWriteToChannels":false,
   "clientsCanWriteToClients":false,
   "extensions":"",
-  "debug":true,
+  "debug":false,
   "transports":[
     "websocket",
     "flashsocket",
