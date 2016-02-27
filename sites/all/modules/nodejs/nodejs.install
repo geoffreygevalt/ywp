@@ -86,19 +86,22 @@ function nodejs_requirements($phase) {
     'description' => t('Can Drupal connect to the Node.js server?'),
   );
 
-  // Initiate a call to the Nodejs server
-  // and react to the response.
-  $message = new StdClass;
-  $response = Nodejs::sendMessage($message);
-
-  // Nodejs::httpRequest() does the work for us. It will return FALSE if the
+  // Nodejs::healthCheck() does the work for us. It will return FALSE if the
   // HTTP Request failed so we just check to see if that happened or not. If
   // There's a response, we can connect to the server.
-  if ($response) {
-    $result = array(
-      'value' => t('The Node.js server was successfully reached.'),
-      'severity' => REQUIREMENT_OK,
-    );
+  if (Nodejs::healthCheck()) {
+    if (!Nodejs::safeNodeServerVersion()) {
+      $result = array(
+        'value' => t('The Drupal-Node.js application version is insecure. Please update.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+    else {
+      $result = array(
+        'value' => t('The Node.js server was successfully reached.'),
+        'severity' => REQUIREMENT_OK,
+      );
+    }
   }
   // Http request to the server failed.
   else {

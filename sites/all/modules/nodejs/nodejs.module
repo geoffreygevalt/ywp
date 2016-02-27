@@ -15,6 +15,19 @@ function nodejs_send_content_channel_message($message) {
 }
 
 /**
+ * Implements hook_permission().
+ */
+function nodejs_permission() {
+  return array(
+    'add users to nodejs channels' =>  array(
+      'title' => t('Add users to the Node.js server channels'),
+      'description' => t('Allows to add users manually to any channel in the Node.js server.'),
+    ),
+  );
+}
+
+
+/**
  * Send a content channel token to Node.js.
  *
  * @param mixed $channel
@@ -29,7 +42,7 @@ function nodejs_send_content_channel_token($channel, $notify_on_disconnect = FAL
 
   // Http request went ok, process Node.js server response.
   if ($node_response = Nodejs::sendContentToken($message)) {
-    if ($node_response->status == 'ok') {
+    if ($node_response->status == 'success') {
       // We always set this in drupal.settings, even though Ajax requests will not
       // see it. It's a bit ugly, but it means that setting the tokens for full
       // page requests will just work.
@@ -329,7 +342,7 @@ function nodejs_menu() {
       'title' => 'Add a channel to the Node.js server',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('nodejs_add_user_to_channel_form'),
-      'access callback' => TRUE,
+      'access arguments' => array('add users to nodejs channels'),
       'type' => MENU_CALLBACK,
     ),
   );
@@ -760,18 +773,20 @@ function nodejs_get_client_socket_id() {
 }
 
 class Nodejs {
+
+  public static $SAFE_NODE_SERVER_VERSION = '1.0.8';
+
   public static $messages = array();
 
   public static $config = NULL;
 
   public static $baseUrl = NULL;
 
-  public static $headers = NULL;
+  public static $nodeServerVersion = NULL;
 
   public static function initConfig() {
     if (!isset(self::$config)) {
       self::$config = nodejs_get_config();
-      self::$headers = array('NodejsServiceKey' => self::$config['serviceKey']);
       self::$baseUrl = nodejs_get_url(self::$config);
     }
   }
@@ -790,28 +805,51 @@ class Nodejs {
     }
   }
 
+  public static function safeNodeServerVersion() {
+    if (self::$nodeServerVersion === NULL) {
+      self::healthCheck();
+    }
+    return self::$nodeServerVersion && self::$nodeServerVersion >= self::$SAFE_NODE_SERVER_VERSION;
+  }
+
   public static function sendMessage(StdClass $message) {
     self::initConfig();
+
+    if (!self::safeNodeServerVersion()) {
+      return FALSE;
+    }
+
     drupal_alter('nodejs_message', $message);
     $message->clientSocketId = nodejs_get_client_socket_id();
     $options = array(
       'method' => 'POST',
       'data' => drupal_json_encode($message),
-      'headers' => self::$headers,
       // This is server to server, so start with a low default timeout.
       'timeout' => !empty(self::$config['timeout']) ? self::$config['timeout'] : 5,
     );
     return self::httpRequest('nodejs/publish', $options);
   }
 
+  public static function healthCheck() {
+    $data = self::httpRequest('nodejs/health/check');
+    self::$nodeServerVersion = FALSE;
+    if (is_object($data) && isset($data->version)) {
+      self::$nodeServerVersion = $data->version;
+    }
+    return $data;
+  }
+
   public static function setUserPresenceList($uid, array $uids) {
     self::initConfig();
-    return self::httpRequest("nodejs/user/presence-list/$uid/" . implode(',', $uids), array('headers' => self::$headers));
+    return self::httpRequest("nodejs/user/presence-list/$uid/" . implode(',', $uids));
   }
 
   public static function logoutUser($token) {
     self::initConfig();
-    return self::httpRequest("nodejs/user/logout/$token", array('headers' => self::$headers));
+    $options = array(
+      'method' => 'POST',
+    );
+    return self::httpRequest("nodejs/user/logout/$token", $options);
   }
 
   public static function sendContentTokenMessage($message) {
@@ -821,7 +859,6 @@ class Nodejs {
     $options = array(
       'method' => 'POST',
       'data' => drupal_json_encode($message),
-      'headers' => self::$headers,
       'options' => array('timeout' => 5.0),
     );
     return self::httpRequest('nodejs/content/token/message', $options);
@@ -832,7 +869,6 @@ class Nodejs {
     $options = array(
       'method' => 'POST',
       'data' => drupal_json_encode($message),
-      'headers' => self::$headers,
     );
     return self::httpRequest('nodejs/content/token', $options);
   }
@@ -842,43 +878,67 @@ class Nodejs {
     $options = array(
       'method' => 'POST',
       'data' => drupal_json_encode($message),
-      'headers' => self::$headers,
     );
     return self::httpRequest('nodejs/content/token/users', $options);
   }
 
   public static function kickUser($uid) {
     self::initConfig();
-    return self::httpRequest("nodejs/user/kick/$uid", array('headers' => self::$headers));
+    $options = array(
+      'method' => 'POST',
+    );
+    return self::httpRequest("nodejs/user/kick/$uid", $options);
   }
 
   public static function addUserToChannel($uid, $channel) {
     self::initConfig();
-    return self::httpRequest("nodejs/user/channel/add/$channel/$uid", array('headers' => self::$headers));
+    $options = array(
+      'method' => 'POST',
+    );
+    return self::httpRequest("nodejs/user/channel/add/$channel/$uid", $options);
   }
 
   public static function removeUserFromChannel($uid, $channel) {
     self::initConfig();
-    return self::httpRequest("nodejs/user/channel/remove/$channel/$uid", array('headers' => self::$headers));
+    $options = array(
+      'method' => 'POST',
+    );
+    return self::httpRequest("nodejs/user/channel/remove/$channel/$uid", $options);
   }
 
   public static function addChannel($channel) {
     self::initConfig();
-    return self::httpRequest("nodejs/channel/add/$channel", array('headers' => self::$headers));
+    $options = array(
+      'method' => 'POST',
+    );
+    return self::httpRequest("nodejs/channel/add/$channel", $options);
   }
 
   public static function checkChannel($channel) {
     self::initConfig();
-    return self::httpRequest("nodejs/channel/check/$channel", array('headers' => self::$headers));
+    return self::httpRequest("nodejs/channel/check/$channel");
   }
 
   public static function removeChannel($channel) {
     self::initConfig();
-    return self::httpRequest("nodejs/channel/remove/$channel", array('headers' => self::$headers));
+    $options = array(
+      'method' => 'POST',
+    );
+    return self::httpRequest("nodejs/channel/remove/$channel", $options);
   }
 
-  public static function httpRequest($url, $options) {
+  public static function httpRequest($url, $options = array()) {
     self::initConfig();
+
+    $options += array(
+      'method' => 'GET',
+      'headers' => array(),
+    );
+    $options['headers'] += array(
+      'NodejsServiceKey' => self::$config['serviceKey'],
+      'Content-type' => 'application/json',
+    );
+
     $response = drupal_http_request(self::$baseUrl . $url, $options);
     // If a http error occurred, and logging of http errors is enabled, log it.
     if (isset($response->error)) {
