@@ -1,0 +1,28 @@
+{
+  "name": "drupal-node.js",
+  "description": "Push notifications from Drupal.",
+  "version": "1.0.8",
+  "homepage": "https://github.com/beejeebus/drupal-nodejs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beejeebus/drupal-nodejs.git"
+  },
+  "license": "GPL-2.0",
+  "engines": {
+    "node": "4.2.x"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
+  "dependencies": {
+    "express": "4.x",
+    "request": "2.67.x",
+    "body-parser": "1.14.2",
+    "socket.io": "1.x"
+  },
+  "devDependencies": {
+    "mocha": "2.3.x",
+    "nock": "7.0.x",
+    "socket.io-client": "1.x"
+  }
+}
