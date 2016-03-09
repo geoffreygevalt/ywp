@@ -21,7 +21,8 @@ Drupal.Nodejs.runCallbacks = function (message) {
   // It's possible that this message originated from an ajax request from the
   // client associated with this socket.
   if (message.clientSocketId == Drupal.Nodejs.socket.id) {
-    return;
+    // HACK: allow nodejs to update currently viewed page.
+    //return;
   }
   if (message.callback) {
     if (typeof message.callback == 'string') {

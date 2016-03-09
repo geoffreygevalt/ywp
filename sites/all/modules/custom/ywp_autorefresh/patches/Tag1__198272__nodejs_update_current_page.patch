@@ -1,0 +1,17 @@
+Index: sites/all/modules/nodejs/nodejs.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- sites/all/modules/nodejs/nodejs.js	(revision b7c673bae43771d1a4df4aac5e5605935c86e1df)
++++ sites/all/modules/nodejs/nodejs.js	(revision )
+@@ -21,7 +21,8 @@
+   // It's possible that this message originated from an ajax request from the
+   // client associated with this socket.
+   if (message.clientSocketId == Drupal.Nodejs.socket.id) {
+-    return;
++    // HACK: allow nodejs to update currently viewed page.
++    //return;
+   }
+   if (message.callback) {
+     if (typeof message.callback == 'string') {
