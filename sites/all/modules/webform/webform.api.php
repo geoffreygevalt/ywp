@@ -121,7 +121,7 @@ function hook_webform_submission_load(&$submissions) {
  *
  * @see webform_submission_create()
  */
-function hook_webform_submission_create($submission, $node, $account, $form_state) {
+function hook_webform_submission_create_alter(&$submission, &$node, &$account, &$form_state) {
   $submission->new_property = TRUE;
 }
 
@@ -835,6 +835,7 @@ function _webform_defaults_component() {
       'optrand' => 0,
       'qrand' => 0,
       'description' => '',
+      'description_above' => FALSE,
       'private' => FALSE,
       'analysis' => TRUE,
     ),
@@ -991,6 +992,27 @@ function hook_webform_component_display_alter(&$element, &$component) {
     $element['#title'] = 'My custom title';
     $element['#default_value'] = 42;
   }
+}
+
+/**
+ * Performs the conditional action set on an implemented component.
+ *
+ * Setting the form element allows form validation functions to see the value
+ * that webform has set for the given component.
+ *
+ * @param array $component
+ *   The webform component array whose value is being set for the currently-
+ *   edited submission.
+ * @param array $element
+ *   The form element currently being set.
+ * @param array $form_state
+ *   The form's state.
+ * @param string $value
+ *   The value to be set, as defined in the conditional action.
+ */
+function _webform_action_set_component($component, &$element, &$form_state, $value) {
+  $element['#value'] = $value;
+  form_set_value($element, $value, $form_state);
 }
 
 /**
@@ -1333,6 +1355,39 @@ function hook_webform_html_capable_mail_systems_alter(&$systems) {
   if (module_exists('my_module')) {
     $systems[] = 'MyModuleMailSystem';
   }
+}
+
+/**
+ * Define a list of webform exporters.
+ *
+ * @return array
+ *   A list of the available exporters provided by the module.
+ *
+ * @see webform_webform_exporters()
+ */
+function hook_webform_exporters() {
+  $exporters = array(
+    'webform_exporter_custom' => array(
+      'title' => t('Webform exporter name'),
+      'description' => t('The description for this exporter.'),
+      'handler' => 'webform_exporter_custom',
+      'file' => drupal_get_path('module', 'yourmodule') . '/includes/webform_exporter_custom.inc',
+      'weight' => 10,
+    ),
+  );
+
+  return $exporters;
+}
+
+/**
+ * Modify the list of webform exporters definitions.
+ *
+ * @param  array &$exporters
+ *   A list of all available webform exporters.
+ */
+function hook_webform_exporters_alter(&$exporters) {
+  $exporters['excel']['handler'] = 'customized_excel_exporter';
+  $exporters['excel']['file'] = drupal_get_path('module', 'yourmodule') . '/includes/customized_excel_exporter.inc';
 }
 
 /**

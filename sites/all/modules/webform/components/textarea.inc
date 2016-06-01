@@ -23,6 +23,7 @@ function _webform_defaults_textarea() {
       'resizable' => 1,
       'disabled' => 0,
       'description' => '',
+      'description_above' => FALSE,
       'placeholder' => '',
       'attributes' => array(),
       'private' => FALSE,
@@ -223,6 +224,14 @@ function _webform_analysis_textarea($component, $sids = array(), $single = FALSE
  */
 function _webform_table_textarea($component, $value) {
   return empty($value[0]) ? '' : check_plain($value[0]);
+}
+
+/**
+ * Implements _webform_action_set_component().
+ */
+function _webform_action_set_textarea($component, &$element, &$form_state, $value) {
+  $element['#value'] = $value;
+  form_set_value($element, $value, $form_state);
 }
 
 /**

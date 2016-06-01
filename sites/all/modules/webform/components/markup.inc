@@ -44,7 +44,7 @@ function _webform_edit_markup($component) {
     '#type' => 'text_format',
     '#title' => t('Value'),
     '#default_value' => $component['value'],
-    '#description' => t('Markup allows you to enter custom HTML into your form.') . theme('webform_token_help', array('groups' => array('node', 'submission'))),
+    '#description' => t('Markup allows you to enter custom HTML into your form.') . ' ' . theme('webform_token_help', array('groups' => array('node', 'submission'))),
     '#weight' => -1,
     '#format' => $component['extra']['format'],
     '#element_validate' => array('_webform_edit_markup_validate'),
@@ -107,19 +107,40 @@ function _webform_render_markup($component, $value = NULL, $filter = TRUE, $subm
  *
  * Required to have access to current form values from $form_state.
  */
-function _webform_render_markup_after_build($form_element, &$form_state){
+function _webform_render_markup_after_build($form_element, &$form_state) {
   global $user;
   $node = node_load($form_element['#webform_nid']);
   $submission = NULL;
 
-  // Convert existing submitted data to an in-progress submission.
-  if (!empty($form_state['storage']['submitted'])) {
-    module_load_include('inc', 'webform', 'includes/webform.submissions');
-    $submission = webform_submission_create($node, $user, $form_state, TRUE, $form_element['#webform_submission']);
-  }
+  // Convert existing submission data to an in-progress submission.
+  $form_state_for_submission = $form_state;
+  $form_state_for_submission['values']['submitted'] = $form_state['#conditional_values'];
+  module_load_include('inc', 'webform', 'includes/webform.submissions');
+  $submission = webform_submission_create($node, $user, $form_state_for_submission, TRUE, $form_element['#webform_submission']);
 
   // Replace tokens using the current or generated submission.
-  $form_element['#markup'] = webform_replace_tokens($form_element['#markup'], $node, $submission, NULL, $form_element['#webform_format']);
+  $value = webform_replace_tokens($form_element['#markup'], $node, $submission, NULL, $form_element['#webform_format']);
+
+  // If the markup value has been set by a conditional, display that value.
+  $component = $form_element['#webform_component'];
+  if ($node) {
+    $sorter = webform_get_conditional_sorter($node);
+    // If the form was retrieved from the form cache, the conditionals may not
+    // have been executed yet.
+    if (!$sorter->isExecuted()) {
+      $sorter->executeConditionals(isset($submission) ? $submission->data : array());
+    }
+    $conditional_value = $sorter->componentMarkup($component['cid'], $component['page_num']);
+    if (isset($conditional_value)) {
+      // Provide original value, should conditional logic no longer set the value.
+      $form_element['#wrapper_attributes']['data-webform-markup'] = $value;
+      if (is_string($conditional_value)) {
+        $value = check_markup($conditional_value, $component['extra']['format']);
+      }
+    }
+  }
+
+  $form_element['#markup'] = $value;
   return $form_element;
 }
 
@@ -129,12 +150,18 @@ function _webform_render_markup_after_build($form_element, &$form_state){
  */
 function _webform_display_markup($component, $value, $format = 'html', $submission = array()) {
   $node = isset($component['nid']) ? node_load($component['nid']) : NULL;
+  $value = webform_replace_tokens($component['value'], $node, $submission, NULL, $component['extra']['format']);
+
+  // If the markup value has been set by a conditional, display that value.
+  if ($node && is_string($conditional_value = webform_get_conditional_sorter($node)->componentMarkup($component['cid'], $component['page_num']))) {
+    $value = check_markup($conditional_value, $component['extra']['format']);
+  }
 
   return array(
     '#weight' => $component['weight'],
     '#theme' => 'webform_display_markup',
     '#format' => $format,
-    '#value' => webform_replace_tokens($component['value'], $node, $submission, NULL, $component['extra']['format']),
+    '#value' => $value,
     '#translatable' => array('title'),
     '#access' => $component['extra']['display_on'] != 'form',
   );

@@ -1506,7 +1506,7 @@ function panels_ajax_edit_pane_next(&$form_state) {
 }
 
 /**
- * Handle the 'finish' click on teh add/edit pane form wizard.
+ * Handle the 'finish' click on the add/edit pane form wizard.
  *
  * All we need to do is set a flag so the return can handle adding
  * the pane.
@@ -1779,13 +1779,13 @@ function panels_edit_configure_pane_css_form($form, &$form_state) {
     '#type' => 'textfield',
     '#default_value' => isset($pane->css['css_id']) ? $pane->css['css_id'] : '',
     '#title' => t('CSS ID'),
-    '#description' => t('CSS ID to apply to this pane. This may be blank.'),
+    '#description' => t('CSS ID to apply to this pane. This may be blank. Keywords from context are allowed.'),
   );
   $form['css_class'] = array(
     '#type' => 'textfield',
     '#default_value' => isset($pane->css['css_class']) ? $pane->css['css_class'] : '',
     '#title' => t('CSS class'),
-    '#description' => t('CSS class to apply to this pane. This may be blank.'),
+    '#description' => t('CSS class to apply to this pane. This may be blank. Keywords from context are allowed.'),
   );
 
   $form['next'] = array(

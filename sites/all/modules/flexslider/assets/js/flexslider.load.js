@@ -3,6 +3,7 @@
   // Behavior to load FlexSlider
   Drupal.behaviors.flexslider = {
     attach: function(context, settings) {
+      var id;
       var sliders = [];
       if ($.type(settings.flexslider) !== 'undefined' && $.type(settings.flexslider.instances) !== 'undefined') {
 
@@ -34,7 +35,7 @@
     $('#' + id, context).once('flexslider', function() {
       // Remove width/height attributes
       // @todo load the css path from the settings
-      $(this).find('ul.slides > li > *').removeAttr('width').removeAttr('height');
+      $(this).find('ul.slides > li *').removeAttr('width').removeAttr('height');
 
       if (optionset) {
         // Add events that developers can use to interact.

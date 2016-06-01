@@ -143,7 +143,7 @@ class views_plugin_query_default extends views_plugin_query {
     );
 
 /**
- * -- we no longer want the base field to appear automatigically.
+ * -- we no longer want the base field to appear automatically.
     if ($base_field) {
       $this->fields[$base_field] = array(
         'table' => $base_table,
@@ -888,7 +888,7 @@ class views_plugin_query_default extends views_plugin_query {
   /**
    * Add a complex WHERE clause to the query.
    *
-   * The caller is reponsible for ensuring that all fields are fully qualified
+   * The caller is responsible for ensuring that all fields are fully qualified
    * (TABLE.FIELD) and that the table already exists in the query.
    * Internally the dbtng method "where" is used.
    *
@@ -1592,7 +1592,7 @@ class views_plugin_query_default extends views_plugin_query {
           'sort' => 'views_handler_sort_group_by_numeric',
         ),
       )
-    );
+    ) + views_fetch_plugin_data('query_aggregate');
   }
 
   /**

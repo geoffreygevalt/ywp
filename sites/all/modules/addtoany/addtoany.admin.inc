@@ -28,7 +28,7 @@ function addtoany_admin_settings() {
   'text'                         => 'Text only',
   'none'                         => 'None',
   );
-  
+
   $form['#attached']['js'] = array(
     drupal_get_path('module', 'addtoany') . '/addtoany.admin.js',
   );
@@ -40,14 +40,15 @@ function addtoany_admin_settings() {
     '#collapsed'    => FALSE,
   );
   $form['addtoany_button_settings']['addtoany_buttons_size'] = array(
-    '#type'          => 'radios',
+    '#type'          => 'textfield',
     '#title'         => t('Icon size'),
-    '#default_value' => variable_get('addtoany_buttons_size', '16'),
-    '#options'       => array(
-      '32' => t('Large (32 x 32 pixels, SVG format, modern)'),
-      '16' => t('Small (16 x 16 pixels, PNG format, traditional)'),
-    ),
+    '#field_suffix'  => ' ' . t('pixels'),
+    '#default_value' => variable_get('addtoany_buttons_size', '32'),
+    '#size'          => 10,
+    '#maxlength'     => 3,
+    '#element_validate' => array('element_validate_integer_positive'),
     '#description'   => t('AddToAny\'s large SVG icons are mobile ready, pixel perfect on high DPI or retina displays, and revert to PNG in older browsers.'),
+    '#required'      => TRUE
   );
   $form['addtoany_button_settings']['addtoany_service_button_settings'] = array(
     '#type'         => 'fieldset',
@@ -109,7 +110,7 @@ function addtoany_admin_settings() {
     '#default_value' => variable_get('addtoany_link_text', ''),
     '#description'   => t('Text for the universal sharing button link. Example: Share'),
   );
-  
+
   $form['addtoany_placement_settings'] = array(
     '#type'  => 'fieldset',
     '#title' => t('Placement'),
@@ -179,6 +180,12 @@ function addtoany_admin_settings() {
     '#title'         => t('Additional JavaScript'),
     '#default_value' => variable_get('addtoany_additional_js', ''),
     '#description'   => t('You can add special JavaScript code for AddToAny. Advanced users might want to check out AddToAny\'s <a href="https://www.addtoany.com/buttons/api/" target="_blank">JavaScript API</a> and <a href="https://www.addtoany.com/buttons/customize/drupal" target="_blank">documentation</a>.'),
+  );
+  $form['addtoany_additional_settings']['addtoany_additional_css'] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Additional CSS'),
+    '#default_value' => variable_get('addtoany_additional_css', ''),
+    '#description'   => t('You can add special CSS code for AddToAny. See <a href="https://www.addtoany.com/buttons/customize/drupal" target="_blank">AddToAny documentation</a> for customizations.'),
   );
   $form['addtoany_additional_settings']['addtoany_no_3p'] = array(
     '#type'          => 'checkbox',
