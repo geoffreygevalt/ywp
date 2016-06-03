@@ -1,0 +1,49 @@
+name = Oyster
+description = Creative Photo Drupal 7 Theme. 
+core = 7.x
+engine = phptemplate
+version = 1.0.3
+
+; Define theme CSS.
+stylesheets[all][] = css/theme.css
+stylesheets[all][] = css/responsive.css
+stylesheets[all][] = css/oyster.css
+stylesheets[all][] = css/drupal.css
+
+; Define theme JS libraries.
+scripts[1] = js/modules.js
+scripts[2] = js/animate.js
+scripts[3] = js/theme.js
+scripts[4] = js/jquery.countdown.min.js
+scripts[5] = js/sticky.js
+
+; Define theme block regions.
+regions[header_branding] = Header Branding
+regions[header_menu] = Header Menu
+regions[fullscreen] = Fullscreen
+regions[content] = Content
+regions[right_sidebar] = Right Sidebar
+regions[left_sidebar] = Left Sidebar
+regions[after_content] = After Content
+regions[footer_1] = Footer Box 1
+regions[footer_2] = Footer Box 2
+regions[footer_3] = Footer Box 3
+regions[footer_4] = Footer Box 4
+regions[footer_bottom_left] = Footer Bottom Left
+regions[footer_bottom_right]  = Footer Bottom Right
+
+; Define theme setting defaults.
+settings[sticky_header] = 1
+settings[header_search] = 1
+
+settings[portfolio_meta_author] = 1
+settings[portfolio_meta_date] = 1
+settings[portfolio_meta_comments] = 1
+settings[portfolio_meta_title] = 1
+settings[portfolio_meta_share] = 1
+
+settings[article_meta_author] = 1
+settings[article_meta_date] = 1
+settings[article_meta_comments] = 1
+settings[article_meta_title] = 1
+settings[article_meta_share] = 1

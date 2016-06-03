@@ -1,0 +1,25 @@
+1.0.4 (06/18/15)
+  *Updated prettyPhoto to 3.1.6.
+  *Updated Drupal Core and several modules in full install.
+  *General tweaks/bug fixes.
+
+1.0.3 (04/10/15)
+  *Updated Drupal core in demo install.
+  *Fixed permissions error in Oyster modules.
+  *Fixed some responsive issues with fullwidth pages.
+  *Enabled prettyPhoto deep linking by default.
+  *Updated FontAwesome to latest version.
+
+1.0.2 (02/16/15)
+  *Updated Drupal core in demo install.
+  *Modified pagination function to prevent infinite loops.
+  *General fixes/improvements.
+  *Minor style/layout tweaks.
+
+1.0.1 (11/15/14)
+  *Fixed a PHP 5.3 bug related to statistics_get() in several template files.
+  *Fixed undefined index error for portfolio nodes with empty category field.
+  *Fixed JS caching issue with Oyster slider and gallery modules.
+
+1.0 (11/05/14)
+  *Initial release.

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Oyster Documentation</title>
+<link href="http://fonts.googleapis.com/css?family=Voces" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="style.css"/>
+<script src="jquery.js"></script>
+<script src="toc.js"></script>
+</head>
+<body>
+<div id="toc">
+	
+</div>
+
+
+<div id="wrapper">
+<h2>Overview</h2>
+<p>If you are looking for the best photo theme with unlimited capabilities yet easy editable - our new Oyster Drupal Theme will help to break a new ground for your web project! Modern design and responsive framework in combination with maximum flexibility allows to customize this theme in the way you like. For theme support that cannot be found in this documentation, please visit our <a href="http://refaktorthemes.com/support"> support forum</a>. 
+<p>Updated: 11/05/14<br>Author: <a href="http://refaktorthemes.com" target="_blank">Refaktor</a><br>Docs powered by: <a href="https://github.com/jgallen23/toc" target="_blank">TOC</a><br>Original design by <a href="http://themeforest.net/user/mad_dog" target="_blank">
+mad_dog</a></p>
+<h2>Installation</h2>
+<p>There are two ways Oyster can be installed. For existing sites that already have content, the first method will only involve the installation and activation of the theme. The second option includes a full Drupal 7 install with the same SQL database file used to create the theme demo. Please choose which installation method works best for you and follow the instructions. We do highly recommend you perform the full install if you are new to Drupal or don't have any existing content you need to work with.
+<h3>Theme Only</h3>
+Option 1:
+<ul>
+  <li>Visit yourdomain.com/admin/appearance/install</li>
+  <li>Upload the Oyster.zip file found inside the /theme folder in the download files</li>
+  <li>Enable and set to default</li>
+</ul>
+Option 2:
+<ul>
+  <li>Extract the Oyster.zip file and upload the Oyster folder via FTP to /sites/all/themes</li>
+  <li>Visit yourdomain.com/admin/appearance/</li>
+  <li>Scroll down to "DISABLED THEMES" and set and enable Oyster</li>
+</ul>
+
+<h3>Full Drupal Install</h3>
+<p>The following steps are designed for people that have experience manually installing Drupal and importing databases. If you do not feel comfortable performing these steps yourself, contact your server administrator for help. <strong>NOTE</strong> this option is for a completely new Drupal install. Do not import the provided SQL file into an existing Drupal database or you will lose all of your data!</p>
+<ol>
+<li>Create a database for this installation of Drupal and import the SQL file that came with the theme.</li>
+<li>Follow <a href="http://drupal.org/documentation/install/settings-file" target="_blank"> these directions</a> to create the settings.php file. Save this file somewhere so you can copy it over to the Drupal installation we have provided.</li>
+<li>Copy the entire contents of the /demo/Oyster folder from the download files to the location on your web server where you want your site to be accessed. If you want your primary domain to point to your install of Oyster, copy everything to the root folder. If you want your site to be accessed as a subsection of your domain (for example: yourdomain.com/drupal) then simply rename the /demo/oyster folder to the desired name and upload to the root of your server. Also be sure to copy over the settings.php file mentioned in the previous step</li>
+<li>Login to your site with the username <strong>admin</strong> and the password <strong>admin</strong> and visit /admin/people to change the admin username and password.</li>
+<li>Go through the Drupal configuration found in /admin/config options and update all the necessary information to reflect your website. Also be sure to visit /admin/config/media/file-system and change the Temporary Directory if needed.</li>
+
+</ol>
+<h2>Oyster Sub-Theme</h2>
+
+<p>Oyster comes with a shell sub-theme called Oyster_sub that you can use to make customizations to the style and template structure of the parent theme without having to modify the parent theme itself. This is useful if you plan on updating the parent theme as we release updates on ThemeForest. If you performed the full install you will already see oyster_sub in the list of themes available. If you did the standalone install you can find the oyster_sub.zip file in the root of the download files and you can install it like any other theme.</p>
+<p>There is an empty stylesheet already defined which is /css/custom.css (inside the oyster_sub folder). Use this file to add all of the custom CSS that you plan on using. You can also copy any template file from the /oyster/tpl folder into the /Oyster_sub folder and it will listen to the sub-themes template file first. This will allow you to update the parent theme as we make updates without losing your customizations. Just pay attention to the changelog and compare the parent theme files with yours and make any adjustments as needed.</p>
+<p>You will need to configure the sub-themes theme settings separately from the parent theme's, so visit /admin/appearance/settings/oyster_sub to configure the theme settings for the sub-theme. You also need to configure the block regions separately.</p>
+
+
+<h2>Modules</h2>
+<p>Below are the modules required to fully utilize the theme:</p>
+
+<ul>
+<li><a href="http://drupal.org/project/ctools">Chaos Tools</a></li>
+<li><a href="http://drupal.org/project/views">Views</a></li>
+<li><a href="http://drupal.org/project/jquery_update">jQuery Update</a></li>
+<li><a href="http://drupal.org/project/entity">Entity API</a></li>
+<li><a href="http://drupal.org/project/votingapi">Voting API</a></li>
+<li>Oyster Utilities (/modules/oyster_utilities in the download files)</li>
+<li>Oyster Slider (/modules/oyster_slider in the download files)</li>
+<li>Oyster Gallery (/modules/oyster_gallery in the download files)</li>
+<li>Oyster Striped (/modules/oyster_striped in the download files)</li>
+</ul>
+
+<h3>Oyster Utilities</h3>
+<p>This is the core helper module for the Oyster theme and is required by the Slider, Gallery and Striped modules. It has no settings and needs no additional configuration.</p>
+
+<h3>Oyster Slider</h3>
+<img src="images/oyster_slider.png" width="900px"><br/><br/>
+<p>This module creates a custom entity called Oyster Slider which can be used to create a slider like the one seen on the <a href="http://refaktorthemes.com/oyster" target="_blank">demo homepage.</a> Once installed, you can navigate to /admin/structure/oyster-slider or simply click the Structure link in your admin menu and click Oyster Sliders. Once there click the "Add oyster slider" link and you can begin creating your slider. Enter a name for your slider and then proceed to use the following fields:</p>
+
+<h4>Slider Content</h4>
+<img src="images/slider_content.png"><br/><br/>
+<p>This field accepts a slide title, caption and image. You can add additional slides by pressing the "add another item" button. There is no limit to how many slides the slider can use.</p>
+
+<h4>Slider Icons</h4>
+<img src="images/slider_icons.png"><br/><br/>
+<p>This optional field allows you to add social icons and links which will open in an overlay over the slider when the appropriate button is clicked in the slider controls. Simply select the icon you want from the dropdown and enter your link.</p>
+
+<h4>Slider Settings</h4>
+<img src="images/slider_settings.png"><br/><br/>
+<p>Finally you can configure the overall settings for the slider. You can adjust the time between the slide animation, the effect, autoplay, enable/disable the controls and the social icon button.</p>
+
+<h4>Slider Block</h4>
+<p>The Oyster Slider module automatically creates a block for every slider you create. Visit /admin/structure/block and add your slider block(s) to the region of your choice. All Oyster Sliders will be labeled Oyster Slider: Your Title and you can use the block visibility settings to dictate what nodes you want the slider to be visible on.</p>
+
+<h3>Oyster Gallery</h3>
+<img src="images/oyster_galleries.png"><br/><br/>
+
+<p>This module creates a custom entity called Oyster Gallery which can be used to create a gallery like the one seen on the <a href="http://refaktorthemes.com/oyster/gallery-flow" target="_blank">following page.</a> Once installed, you can navigate to /admin/structure/oyster-gallery or simply click the Structure link in your admin menu and click Oyster Galleries. Once there click the "Add oyster gallery" link and you can begin creating your gallery. Enter a name for your gallery and then proceed to use the following fields:</p>
+
+<h4>Gallery Content</h4>
+<img src="images/gallery_content.png"><br/><br/>
+<p>This field accepts a gallery title and image. You can add additional items by pressing the "add another item" button. There is no limit to how many items the gallery can use.</p>
+
+<h4>Gallery Settings</h4>
+<img src="images/gallery_settings.png"><br/><br/>
+<p>Here you can select the layout you want to use for your gallery. You have eight options to choose from:</p>
+<ul>
+<li>Kenburns - <a href="http://refaktorthemes.com/oyster/gallery-kenburns" target="_blank">http://refaktorthemes.com/oyster/gallery-kenburns</a></li>
+<li>Flow - <a href="http://refaktorthemes.com/oyster/gallery-flow" target="_blank">http://refaktorthemes.com/oyster/gallery-flow</a></li>
+<li>Ribbon - <a href="http://refaktorthemes.com/oyster/gallery-ribbon" target="_blank">http://refaktorthemes.com/oyster/gallery-ribbon</a></li>
+<li>Photo Listing - <a href="http://refaktorthemes.com/oyster/gallery-photo-listing" target="_blank">http://refaktorthemes.com/oyster/gallery-photo-listing</a></li>
+<li>Grid - <a href="http://refaktorthemes.com/oyster/gallery-grid" target="_blank">http://refaktorthemes.com/oyster/gallery-grid</a></li>
+<li>Grid 2 - <a href="http://refaktorthemes.com/oyster/gallery-grid-2" target="_blank">http://refaktorthemes.com/oyster/gallery-grid-2</a></li>
+<li>Masonry - <a href="http://refaktorthemes.com/oyster/gallery-masonry" target="_blank">http://refaktorthemes.com/oyster/gallery-masonry</a></li>
+<li>Masonry - <a href="http://refaktorthemes.com/oyster/gallery-masonry-2" target="_blank">http://refaktorthemes.com/oyster/gallery-masonry-2</a></li>
+</ul>
+
+<h4>Gallery Block</h4>
+<p>The Oyster Gallery module automatically creates a block for every gallery you create. Visit /admin/structure/block and add your gallery block(s) to the region of your choice. All Oyster Galleries will be labeled Oyster Gallery: Your Title and you can use the block visibility settings to dictate what nodes you want the gallery to be visible on.</p>
+
+<h3>Oyster Striped</h3>
+<img src="images/oyster_striped.png" width="900px"><br/><br/>
+
+<p>This module creates a custom entity called Oyster Striped which can be used to create a Striped block like the one seen on the <a href="http://refaktorthemes.com/vertical-striped" target="_blank">following page.</a> Once installed, you can navigate to /admin/structure/oyster-striped or simply click the Structure link in your admin menu and click Oyster Striped. Once there click the "Add oyster striped" link and you can begin creating your striped block. Enter a name for your item and then proceed to use the following fields:</p>
+
+<h4>Striped Content</h4>
+<img src="images/striped_content.png"><br/><br/>
+<p>This field accepts a title, caption, URL and image. You can add additional items by pressing the "add another item" button. There is no limit to how many items the striped block can use but we recommend a maximum of 6.</p>
+
+<h4>Striped Settings</h4>
+<img src="images/striped_settings.png"><br/><br/>
+<p>This field lets you set your striped layout which can be either horizontal or vertical.</p>
+
+<h4>Striped Block</h4>
+<p>The Oyster Striped module automatically creates a block for every item you create. Visit /admin/structure/block and add your block(s) to the region of your choice. All Oyster Striped blocks will be labeled Oyster Striped: Your Title and you can use the block visibility settings to dictate what nodes you want the block(s) to be visible on.</p>
+
+<h3>Oyster Features</h3>
+<p>If you used the "theme only" option to install the theme on an existing install that already has content we recommend you use our Oyster Features module to create the additional content types, fields and Views needed to fully utilize the theme. You will find it in the /assets folder in the download files. This module is a custom <a href="http://drupal.org/project/features" target="_blank">Features</a> module and will not run without it. We recommend copying all of the modules from the /modules folder into your install if you do not already have them. After you have all the modules simply upload and activate the Oyster Features module and the content types, fields and views will automatically be created.</p>
+
+
+<h2>Menu</h2>
+<p>Oyster has a block region called Header Menu which can be used to add any menu block you like. The demo simply uses the default Main Menu block but you can create a custom menu block if you like.</p>
+
+<img src="images/menu-2.png"><br/><br/>
+
+<p><strong>Note:</strong> make sure to check the "show as expanded" box on all parent items with children to ensure the dropdown menu works correctly.</p>
+
+<h2>Content Types</h2>
+
+<h4>Article</h4>
+<p>Oyster uses the default Article content type to handle the blog content with a few additional fields. Please continue reading for an overview of the fields, templates and views used for articles in Oyster.</p>
+
+<img src="images/oyster_article_fields.png" width="1000px"><br/><br/>
+<p><strong>Fields:</strong></p>
+<ul>
+<li><strong>Title:</strong> The default Drupal title field.</li>
+<li><strong>Image:</strong> The default Drupal image field. Multiple images can be uploaded and will be presented in a slider.</li>
+<li><strong>Media Embed:</strong> Long text field that can be used to embed content such as a YouTube or Vimeo video. This will display in place of an image.</li>
+<li><strong>Article Category:</strong> An optional taxonomy term reference field.</li>
+<li><strong>Body:</strong> The default Drupal body field displayed below the image/media.</li>
+<li><strong>Tags:</strong> The default Drupal tags field.</li>
+<li><strong>Like:</strong> A field generated by the Oyster Utilities module that can be used to add a "like" button to your articles.</li>
+</ul>
+
+<p><strong>Template files:</strong></p>
+<ul>
+	<li>/templates/node/node--article.tpl.php</li>
+  <li>/inc/article.inc</li>
+</ul>
+
+<p><strong>Views:</strong></p>
+<p>The demo uses two different blog layouts: masonry and standard. If you did a theme only install you can use either the Oyster Features module or the views export code found in /assets/views in the ThemeForest downloads file to quickly create these views. The standard with left/right sidebar displays article teasers but the masonry is a collection of fields that uses a field rewrite option to display the layout.</p>
+
+<h4>Portfolio</h4>
+<p>Oyster uses a custom content type called Portfolio to display the various Portfolio pages seen on the demo. Please continue reading for an overview of the fields, templates and views used for Portfolios in Oyster.</p>
+
+<img src="images/oyster_portfolio_fields.png" width="1000px"><br/><br/>
+<p><strong>Fields:</strong></p>
+<ul>
+<li><strong>Title:</strong> The default Drupal title field.</li>
+<li><strong>Image:</strong> The default Drupal image field. Multiple images can be uploaded and will be presented in a slider.</li>
+<li><strong>Media Embed:</strong> Long text field that can be used to embed content such as a YouTube or Vimeo video. This will display in place of an image.</li>
+<li><strong>Portfolio Skills:</strong> Text field that accepts unlimited values that displays with the portfolio meta information.</li>
+<li><strong>Portfolio Introduction:</strong> Optional long text field that will display before the Portfolio Gallery.</li>
+<li><strong>Portfolio Gallery:</strong> Optional image field that accepts multiple uploads. Will display in the node between the introduction and body.</li>
+<li><strong>Body:</strong> The default Drupal body field displayed below the image/media.</li>
+<li><strong>Portfolio Category:</strong> An optional taxonomy term reference field which can be used to create an Isotope portfolio layout.</li>
+<li><strong>Portfolio Layout:</strong> A select field with several options to select the type of portfolio layout for the node. See below for the key/label list.</li>
+<pre>
+ribbon|Fullscreen Ribbon
+full_no_info|Fullscreen Without Info
+full_with_info|Fullscreen With Info
+simple|Simple	
+</pre>
+<li><strong>Like:</strong> A field generated by the Oyster Utilities module that can be used to add a "like" button to your articles.</li>
+</ul>
+
+<p><strong>Template files:</strong></p>
+<ul>
+	<li>/templates/node/node--portfolio.tpl.php</li>
+  <li>/inc/article.inc</li>
+  <li>/layouts/portfolio/portfolio-ribbon.php</li>
+  <li>/layouts/portfolio/portfolio-simple.php</li>
+  <li>/layouts/portfolio/portfolio-teaser.php</li>
+  <li>/layouts/portfolio/portfolio-with-info.php</li>
+  <li>/layouts/portfolio/portfolio-without-info.php</li>
+</ul>
+
+<p><strong>Views:</strong></p>
+<p>The demo uses several different portfolio layouts which are provided by the Oyster Utilities module. If you did a theme only install you can use either the Oyster Features module or the views export code found in /assets/views in the ThemeForest downloads file to quickly create the Portfolio view and corresponding displays.</p>
+
+<h4>Oyster Page</h4>
+<p>Oyster uses a custom content type called Oyster Page to handle a couple different layouts seen on the demo. You can have a fullscreen image or video background, or an image with some fullscreen content. Continue reading below for a rundown of the fields and templates used with this content type:</p>
+
+<img src="images/oyster_page_fields.png" width="1000px"><br/><br/>
+<p><strong>Fields:</strong></p>
+<ul>
+<li><strong>Title:</strong> The default Drupal title field.</li>
+<li><strong>Oyster Page Layouts:</strong> A select field with several options to select the type of page layout for the node. See below for the key/label list.</li>
+<pre>
+fullscreen|Fullscreen Page
+image|Image Background
+video|Video Background
+</pre>
+<li><strong>Oyster Page Image:</strong> Image field that allows for one image.</li>
+<li><strong>Oyster Page Video:</strong> Long text field to embed something like a YouTube video.</li>
+<li><strong>Body:</strong> The default Drupal body field displayed below the image/media.</li>
+</ul>
+
+<p><strong>Template files:</strong></p>
+<ul>
+	<li>/templates/node/node--oyster-page.tpl.php</li>
+</ul>
+
+<h2>Custom Blocks</h2>
+
+<p>There are several blocks seen on the demo that are just some simple HTML markup that didn't really warrant a dedicated content type and node templates. We will outline each of those for you here and provide some sample markup you can use in your blocks to replicate what you see. Keep in mind you will want to use the full HTML text filter when using any of this markup.</p>
+
+<h4>Flickr Feed</h4>
+<pre>
+&lt;div class=&quot;widget_flickr&quot;&gt;
+  &lt;div class=&quot;flickr_widget_wrapper&quot;&gt;&lt;script src=&quot;http://www.flickr.com/badge_code_v2.gne?count=8&amp;amp;display=latest&amp;amp;size=s&amp;amp;layout=x&amp;amp;source=user&amp;amp;user=91205275@N03&quot;&gt;&lt;/script&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<h4>Google Maps</h4>
+<pre>&lt;div class=&quot;google-maps&quot;&gt;&lt;iframe src=&quot;https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d193572.00379171!2d-73.97319698171047!3d40.70563080000017!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1414273731552&quot; width=&quot;1170&quot; height=&quot;400&quot; frameborder=&quot;0&quot; style=&quot;border:0&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;</pre>
+
+<h4>Social Icon List</h4>
+<pre>
+&lt;div class=&quot;socials_wrapper&quot;&gt;
+	&lt;ul class=&quot;socials_list&quot;&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_dribbble&quot; target=&quot;_blank&quot; href=&quot;http://dribbble.com/&quot; title=&quot;Dribbble&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_gplus&quot; target=&quot;_blank&quot; href=&quot;https://plus.google.com/&quot; title=&quot;Google+&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_vimeo&quot; target=&quot;_blank&quot; href=&quot;https://vimeo.com/&quot; title=&quot;Vimeo&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_pinterest&quot; target=&quot;_blank&quot; href=&quot;http://pinterest.com&quot; title=&quot;Pinterest&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_facebook&quot; target=&quot;_blank&quot; href=&quot;http://facebook.com&quot; title=&quot;Facebook&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_twitter&quot; target=&quot;_blank&quot; href=&quot;http://twitter.com&quot; title=&quot;Twitter&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a class=&quot;ico_social_instagram&quot; target=&quot;_blank&quot; href=&quot;http://instagram.com&quot; title=&quot;Instagram&quot;&gt;&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;		
+</pre>
+
+<h2>Font Awesome</h2>
+<p>Oyster includes Font Awesome which you can use in any of your node/block content. Refer to the full icon list <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">here</a> which includes example markup.</p>
+
+<h2>Theme Settings</h2>
+<img src="images/oyster_settings.png" width="1000px"><br/><br/>
+<p>The Oyster theme settings can be accessed via /admin/appearance/settings/ and then clicking on the name of your active theme. There are four sections, including the standard Drupal settings. Go through each tab and configure the settings to your liking.</p>
+
+<h2>Block Regions</h2>
+<p>Oyster features 13 block regions where you can add your blocks. Visit yourdomain.com/admin/structure/block to add your own content to the defined block regions. Press "Add Block" to create a new custom blog, or select an existing block from the Disabled list below the defined block regions.</p>
+
+<h2>Thank You</h2>
+<p>Thank you very much for purchasing the Oyster Responsive Drupal 7 theme. Once again if you have any issues or feedback please connect via the <a href="http://themeforest.net/user/refaktor#from" target="_blank">ThemeForest author page</a>. Enjoy using Oyster!</p>
+</p>&copy 2014 Refaktor.
+</div>
+<script>$('#toc').toc();</script></body></html>
