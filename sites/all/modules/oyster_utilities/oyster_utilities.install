@@ -1,0 +1,274 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function oyster_utilities_install() {
+  db_query("UPDATE {system} SET weight = 30 WHERE type = 'module' AND name = 'oyster_utilities'");
+  
+  // Portfolio grid 1 image style.
+  $p_grid1_style = image_style_save(array(
+    'name' => 'oyster_portfolio_grid1',
+    'label' => 'Oyster Portfolio Grid 1 (540 x 350)')
+  );
+  $p_grid1_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 540,
+        'height' => 350,
+        'upscale' => TRUE,
+    ),
+    'isid' => $p_grid1_style['isid'],
+  );
+  image_effect_save($p_grid1_effect);
+  
+  // Portfolio grid 2 image style.
+  $p_grid2_style = image_style_save(array(
+    'name' => 'oyster_portfolio_grid2',
+    'label' => 'Oyster Portfolio Grid 2 (540 x 376)')
+  );
+  $p_grid2_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 540,
+        'height' => 376,
+        'upscale' => TRUE,
+    ),
+    'isid' => $p_grid2_style['isid'],
+  );
+  image_effect_save($p_grid2_effect);
+  
+  // Portfolio columns image style.
+  $p_columns_style = image_style_save(array(
+    'name' => 'oyster_portfolio_columns',
+    'label' => 'Oyster Portfolio Columns (570 x 430)')
+  );
+  $p_columns_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 570,
+        'height' => 430,
+        'upscale' => TRUE,
+    ),
+    'isid' => $p_columns_style['isid'],
+  );
+  image_effect_save($p_columns_effect);
+  
+  // Portfolio gallery image style.
+  $p_gallery_style = image_style_save(array(
+    'name' => 'oyster_portfolio_gallery',
+    'label' => 'Oyster Portfolio Gallery (570 x 401)')
+  );
+  $p_gallery_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 570,
+        'height' => 401,
+        'upscale' => TRUE,
+    ),
+    'isid' => $p_gallery_style['isid'],
+  );
+  image_effect_save($p_gallery_effect);
+  
+  // Node related works image style.
+  $related_works_style = image_style_save(array(
+    'name' => 'oyster_related_works',
+    'label' => 'Oyster Related Works (540 x 368)')
+  );
+  $related_works_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 540,
+        'height' => 368,
+        'upscale' => TRUE,
+    ),
+    'isid' => $related_works_style['isid'],
+  );
+  image_effect_save($related_works_effect);
+  
+  // Node slider image style.
+  $node_slider_style = image_style_save(array(
+    'name' => 'oyster_node_slider',
+    'label' => 'Oyster Node Slider (1170 x 563)')
+  );
+  $node_slider_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 1170,
+        'height' => 563,
+        'upscale' => TRUE,
+    ),
+    'isid' => $node_slider_style['isid'],
+  );
+  image_effect_save($node_slider_effect);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function oyster_utilities_uninstall() {
+
+  // Delete image styles.
+  image_style_delete(image_style_load('oyster_portfolio_grid1'));
+  image_style_delete(image_style_load('oyster_portfolio_grid2'));
+  image_style_delete(image_style_load('oyster_portfolio_columns'));
+  image_style_delete(image_style_load('oyster_portfolio_gallery'));
+  image_style_delete(image_style_load('oyster_related_works'));
+  image_style_delete(image_style_load('oyster_node_slider'));
+
+}
+
+
+/**
+ * Implements hook_field_schema().
+ */
+function oyster_utilities_field_schema($field) {
+
+   switch ($field['type']) {
+    case 'oyster_slider_content':
+      $columns = array(
+        'title' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'caption' => array(
+          'type' => 'text',
+		      'size' => 'big',
+		      'not null' => FALSE,
+        ),
+        'image' => array(
+          'type' => 'varchar',
+          'length' => 225,
+          'not null' => FALSE,
+        ),       
+      );
+      $indexes = array();
+    break;
+    case 'oyster_slider_settings':
+      $columns = array(
+        'time' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'effect' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'autoplay' => array(
+			    'type' => 'int',
+			    'not null' => FALSE,
+			    'size' => 'tiny',
+			    'default' => 1,
+			  ),
+			  'controls' => array(
+			    'type' => 'int',
+			    'not null' => FALSE,
+			    'size' => 'tiny',
+			    'default' => 1,
+			  ),
+			  'icons' => array(
+			    'type' => 'int',
+			    'not null' => FALSE,
+			    'size' => 'tiny',
+			    'default' => 1,
+			  ),
+      );
+      $indexes = array();
+    break;
+    case 'oyster_slider_social':
+      $columns = array(
+        'url' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'icon' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+       			  
+      );
+      $indexes = array();
+    break;
+    case 'oyster_gallery_content':
+      $columns = array(
+        'title' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'image' => array(
+          'type' => 'varchar',
+          'length' => 225,
+          'not null' => FALSE,
+        ),       
+      );
+      $indexes = array();
+    break;
+    case 'oyster_gallery_display':
+      $columns = array(
+        'display' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+      );
+      $indexes = array();
+    break;
+    
+    case 'oyster_striped_content':
+      $columns = array(
+        'title' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'caption' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'url' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+        'image' => array(
+          'type' => 'varchar',
+          'length' => 225,
+          'not null' => FALSE,
+        ),       
+      );
+      $indexes = array();
+    break;
+    case 'oyster_striped_display':
+      $columns = array(
+        'display' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+      );
+      $indexes = array();
+    break;
+    case 'oyster_node_like':
+      $columns = array(
+        'icon' => array(
+          'type' => 'varchar',
+          'length' => '250',
+          'not null' => FALSE,
+        ),
+      );
+      $indexes = array();
+    break;
+  }
+
+  return array(
+    'columns' => $columns,
+	  'indexes' => $indexes,
+  );
+}

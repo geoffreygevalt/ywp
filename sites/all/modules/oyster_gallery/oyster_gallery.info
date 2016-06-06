@@ -1,0 +1,7 @@
+name = Oyster Gallery
+description = Gallery module for the Oyster Drupal 7 Theme.
+core = 7.x
+package = Oyster Theme
+dependencies[] = entity
+dependencies[] = oyster_utilities
+version = "7.x-1.0"

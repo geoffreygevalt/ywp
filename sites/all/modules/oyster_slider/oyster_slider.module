@@ -1,0 +1,171 @@
+<?php
+
+/**
+ * @file
+ * Include additional module files.
+ */
+require_once dirname(__FILE__) . '/inc/oyster_slider_block.inc';
+
+/**
+ * Implements hook_entity_info().
+ */
+function oyster_slider_entity_info() {
+  $info = array();
+
+  $info['oyster_slider'] = array(
+    'label' => t('Oyster Slider'),
+    'base table' => 'oyster_slider',
+    'entity keys' => array(
+      'id' => 'id',
+      'label' => 'name',
+    ),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIController',
+    'module' => 'oyster_slider',
+    'access callback' => 'oyster_slider_access_callback',
+		'uri callback' => 'entity_class_uri',
+		'admin ui' => array(
+		  'path' => 'admin/structure/oyster-slider',
+		  'controller class' => 'OysterSliderUIController',
+		),
+		'fieldable' => TRUE,
+  );
+
+  return $info;
+}
+
+/**
+ * Oyster Slider UI Controller extending the Entity Default UI Controller class.
+ */
+class OysterSliderUIController extends EntityDefaultUIController{
+
+  protected function overviewTableRow($conditions, $id, $entity, $additional_cols = array()) {
+    // Set URI to null
+    $entity_uri = NULL;
+    
+    $row[] = array(
+      'data' => array(
+        '#theme' => 'entity_ui_overview_item', 
+        '#label' => entity_label($this->entityType, $entity), 
+        '#name' => !empty($this->entityInfo['exportable']) ? entity_id($this->entityType, $entity) : FALSE, 
+        '#url' => $entity_uri ? $entity_uri : FALSE, 
+        '#entity_type' => $this->entityType,
+      ),
+    );
+
+    // Add in any passed additional cols.
+    foreach ($additional_cols as $col) {
+      $row[] = $col;
+    }
+
+    // Add a row for the exportable status.
+    if (!empty($this->entityInfo['exportable'])) {
+      $row[] = array('data' => array(
+          '#theme' => 'entity_status', 
+          '#status' => $entity->{$this->statusKey},
+        ));
+    }
+    // In case this is a bundle, we add links to the field ui tabs.
+    $field_ui = !empty($this->entityInfo['bundle of']) && entity_type_is_fieldable($this->entityInfo['bundle of']) && module_exists('field_ui');
+    // For exportable entities we add an export link.
+    $exportable = !empty($this->entityInfo['exportable']);
+    // If i18n integration is enabled, add a link to the translate tab.
+    $i18n = !empty($this->entityInfo['i18n controller class']);
+
+    // Add operations depending on the status.
+    if (entity_has_status($this->entityType, $entity, ENTITY_FIXED)) {
+      $row[] = array(
+        'data' => l(t('clone'), $this->path . '/manage/' . $id . '/clone'),
+        'colspan' => $this->operationCount(),
+      );
+    }
+    else {
+      $row[] = l(t('edit'), $this->path . '/manage/' . $id);
+
+      if ($field_ui) {
+        $row[] = l(t('manage fields'), $this->path . '/manage/' . $id . '/fields');
+        $row[] = l(t('manage display'), $this->path . '/manage/' . $id . '/display');
+      }
+      if ($i18n) {
+        $row[] = l(t('translate'), $this->path . '/manage/' . $id . '/translate');
+      }
+      if ($exportable) {
+        $row[] = l(t('clone'), $this->path . '/manage/' . $id . '/clone');
+      }
+
+      if (empty($this->entityInfo['exportable']) || !entity_has_status($this->entityType, $entity, ENTITY_IN_CODE)) {
+        $row[] = l(t('delete'), $this->path . '/manage/' . $id . '/delete', array('query' => drupal_get_destination()));
+      }
+      elseif (entity_has_status($this->entityType, $entity, ENTITY_OVERRIDDEN)) {
+        $row[] = l(t('revert'), $this->path . '/manage/' . $id . '/revert', array('query' => drupal_get_destination()));
+      }
+      else {
+        $row[] = '';
+      }
+    }
+    if ($exportable) {
+      $row[] = l(t('export'), $this->path . '/manage/' . $id . '/export');
+    }
+    return $row;
+  
+  }
+
+}
+
+/**
+ * Access callback for project entities.
+ */
+function oyster_slider_access_callback($op, $slider = NULL, $account = NULL) {
+  if (user_is_anonymous() || !user_access('administer oyster_slider')) {
+    return FALSE;
+  }
+  else {
+    return TRUE;
+  }
+}
+
+/**
+ * Form definition for adding / editing a project.
+ */
+function oyster_slider_form($form, &$form_state, $slider = NULL) {
+
+  $form['name'] = array(
+    '#title' => t('Slider name'),
+    '#type' => 'textfield',
+    '#default_value' => isset($slider->name) ? $slider->name : '',
+    '#required' => TRUE,
+    '#weight' => -1,
+  );
+  
+  field_attach_form('oyster_slider', $slider, $form, $form_state);
+
+  $form['submit'] = array(
+    '#type' => 'submit', 
+    '#value' => isset($slider->id) ? t('Update slider') : t('Save slider'),
+    '#weight' => 50,
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler for the project add/edit form.
+ */
+function oyster_slider_form_submit($form, &$form_state) {
+  $slider = entity_ui_form_submit_build_entity($form, $form_state);
+  $slider->save();
+  drupal_set_message(t('The slider: @name has been saved.', array('@name' => $slider->name)));
+  $form_state['redirect'] = 'admin/structure/oyster-slider';
+}
+
+/**
+ * Implements hook_permission.
+ */
+function oyster_slider_permission() {
+	return array(
+	  'administer oyster_slider' => array(
+	    'title' => t('Administer Oyster Slider'),
+	    'description' => t('Set permissions for use of the Oyster Slider module'),
+	  ),
+	);
+} 

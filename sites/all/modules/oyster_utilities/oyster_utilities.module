@@ -1,0 +1,975 @@
+<?php
+
+/**
+ * Define constants for determine which type of URL should be used.
+ */
+define('OYSTER_UTILITIES_URI_PATH', '3');
+define('OYSTER_UTILITIES_RELATIVE_PATH', '2');
+define('OYSTER_UTILITIES_ABSOLUTE_PATH', '1');
+define('OYSTER_UTILITIES_FULL_URL', '0');
+
+/**
+ * Implementation of hook_init().
+ */
+function oyster_utilities_init() {
+  // Include the js file
+  drupal_add_js(drupal_get_path('module', 'oyster_utilities') . '/js/ajax.js');
+}
+
+/**
+* Implementation of hook_permission().
+*/
+function oyster_utilities_permission() {
+  // Restrict access to either of your new URLs.
+  return array(
+    'access oyster like' => array(
+      'title' => t('Use Oyster Like'),
+      'description' => t('Allow users to "like" node item.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function oyster_utilities_menu() {
+
+  $items['like/%/%'] = array(
+    'title' => 'Like',
+    'page callback' => 'oyster_utilities_ajax',
+    'page arguments' => array(1, 2),
+    'access callback' => 'oyster_utilities_user_access',
+    'access arguments' => array('access oyster like'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+}
+
+/**
+ * Custom access function, works with array of permissions.
+ */
+function oyster_utilities_user_access() {
+  global $user;
+  $permissions = func_get_args();
+  if ($user->uid == 1) {
+    return TRUE;
+  }
+  foreach ($permissions as $perm) {
+    if (user_access($perm))
+      return TRUE;
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function oyster_utilities_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'oyster_utilities') . '/views',
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function oyster_utilities_theme() {
+  return array(
+    'ajax_link' => array(),
+    
+    'file_field_preview' => array(
+      'render element' => 'element',
+    ),
+    'oyster_utilities' => array(
+      'variables' => array(
+        'item' => NULL,
+        'path' => NULL,
+        'image_style' => NULL,
+        'url_type' => NULL,
+      ),
+    ),
+    'oyster_social_share' => array(
+      'template' => 'oyster-social-share',
+      'variables' => array('title' => NULL, 'link' => NULL, 'image' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implements hook_views_plugins().
+ */
+function oyster_utilities_views_plugins() {
+  return array(
+    'style' => array(
+      'oyster_views' => array(
+        'title' => t('Oyster Views'),
+        'help' => t('Create views layout options for the Oyster theme.'),
+        'handler' => 'oyster_utilities_views_plugin_layouts',
+        'theme' => 'oyster_views',
+        'theme path' => drupal_get_path('module', 'oyster_utilities') . '/views',
+        'uses options' => TRUE,
+        'uses row plugin' => TRUE,
+        'uses fields' => TRUE,
+        'uses grouping' => FALSE,
+        'type' => 'normal',
+        'parent' => 'list',
+        'theme file' => 'oyster_utilities.views.inc',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function oyster_utilities_field_info() {
+	return array(
+		'oyster_slider_content' => array(
+			'label' => t('Oyster Slider Content'),
+			'description' => t('Custom field type and widget for Oyster Slide content.'),
+			'default_widget' => 'oyster_slider_content',
+			'default_formatter' => 'oyster_slider_content',
+			'no_ui' => TRUE,
+		),
+		'oyster_slider_settings' => array(
+			'label' => t('Oyster Slider Settings'),
+			'description' => t('Custom field type and widget for Oyster Slide settings.'),
+			'default_widget' => 'oyster_slider_settings',
+			'default_formatter' => 'oyster_slider_settings',
+			'no_ui' => TRUE,
+		),
+		'oyster_slider_social' => array(
+			'label' => t('Oyster Slider Social Icons'),
+			'description' => t('Custom field type and widget for Oyster Slide social icons.'),
+			'default_widget' => 'oyster_slider_social',
+			'default_formatter' => 'oyster_slider_social',
+			'no_ui' => TRUE,
+		),
+		'oyster_gallery_content' => array(
+			'label' => t('Oyster Gallery Content'),
+			'description' => t('Custom field type and widget for Oyster Gallery content.'),
+			'default_widget' => 'oyster_gallery_content',
+			'default_formatter' => 'oyster_gallery_content',
+			'no_ui' => TRUE,
+		),
+		'oyster_gallery_display' => array(
+			'label' => t('Oyster Gallery Display'),
+			'description' => t('Custom field type and widget for Oyster Gallery display.'),
+			'default_widget' => 'oyster_gallery_display',
+			'default_formatter' => 'oyster_gallery_display',
+			'no_ui' => TRUE,
+		),
+		'oyster_striped_content' => array(
+			'label' => t('Oyster Striped Content'),
+			'description' => t('Custom field type and widget for Oyster Striped content.'),
+			'default_widget' => 'oyster_striped_content',
+			'default_formatter' => 'oyster_striped_content',
+			'no_ui' => TRUE,
+		),
+		'oyster_striped_display' => array(
+			'label' => t('Oyster Striped Display'),
+			'description' => t('Custom field type and widget for Oyster Striped display.'),
+			'default_widget' => 'oyster_striped_display',
+			'default_formatter' => 'oyster_striped_display',
+			'no_ui' => TRUE,
+		),
+		'oyster_node_like' => array(
+			'label' => t('Oyster Node Like'),
+			'description' => t('Custom field type and widget for "liking" a node.'),
+			'default_widget' => 'oyster_node_like',
+			'default_formatter' => 'oyster_node_like',
+		),
+	);
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function oyster_utilities_field_is_empty($item, $field) {
+	$temp = array_keys($field['columns']);
+	$key = array_shift($temp);
+	return empty($item[$key]);
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function oyster_utilities_field_widget_info() {
+	return array(
+		'oyster_slider_content' => array(
+			'label' => t('Oyster Slider Content'),
+			'field types' => array('oyster_slider_content'),
+		),
+		'oyster_slider_settings' => array(
+			'label' => t('Oyster Slider Settings'),
+			'field types' => array('oyster_slider_settings'),
+		),
+		'oyster_slider_social' => array(
+			'label' => t('Oyster Slider Social Icons'),
+			'field types' => array('oyster_slider_social'),
+		),
+		'oyster_gallery_content' => array(
+			'label' => t('Oyster Gallery Content'),
+			'field types' => array('oyster_gallery_content'),
+		),
+		'oyster_gallery_display' => array(
+			'label' => t('Oyster Gallery Display'),
+			'field types' => array('oyster_gallery_display'),
+		),
+		'oyster_striped_content' => array(
+			'label' => t('Oyster Striped Content'),
+			'field types' => array('oyster_striped_content'),
+		),
+		'oyster_striped_display' => array(
+			'label' => t('Oyster Striped Display'),
+			'field types' => array('oyster_striped_display'),
+		),
+		'oyster_node_like' => array(
+			'label' => t('Oyster Node Like'),
+			'field types' => array('oyster_node_like'),
+		),
+	);
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function oyster_utilities_field_formatter_info() {
+	return array(
+		'oyster_slider_content' => array(
+			'label' => t('Oyster Slider Content'),
+			'field types' => array('oyster_slider_content'),
+		),
+		'oyster_slider_settings' => array(
+			'label' => t('Oyster Slider Settings'),
+			'field types' => array('oyster_slider_settings'),
+		),
+		'oyster_slider_social' => array(
+			'label' => t('Oyster Slider Social Icons'),
+			'field types' => array('oyster_slider_social'),
+		),
+		'oyster_gallery_content' => array(
+			'label' => t('Oyster Gallery Content'),
+			'field types' => array('oyster_gallery_content'),
+		),
+		'oyster_gallery_display' => array(
+			'label' => t('Oyster Gallery Display'),
+			'field types' => array('oyster_gallery_display'),
+		),
+		'oyster_striped_content' => array(
+			'label' => t('Oyster Striped Content'),
+			'field types' => array('oyster_striped_content'),
+		),
+		'oyster_striped_display' => array(
+			'label' => t('Oyster Striped Display'),
+			'field types' => array('oyster_striped_display'),
+		),
+		'oyster_node_like' => array(
+			'label' => t('Oyster Node Like'),
+			'field types' => array('oyster_node_like'),
+		),
+		'image_url' => array(
+      'label' => t('Image URL'),
+      'field types' => array('image', 'imagefield_crop'),
+      'settings' => array(
+        'url_type' => '',
+        'image_style' => '',
+        'image_link' => '',
+      ),
+    ),
+	);
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function oyster_utilities_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  
+	switch ($instance['widget']['type']) {
+		case 'oyster_slider_content':
+      
+			$settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+
+			$element['title'] = array(
+				'#type' => 'textfield',
+				'#title' => t('Title'),
+				'#description' => t("Enter your slide title."),
+			);
+			
+			$element['caption'] = array(
+				'#type' => 'textarea',
+				'#title' => t('Caption'),
+				'#description' => t("Enter your slide caption."),
+			);
+			
+			$element['image'] = array(
+				'#type' => 'managed_file',
+				'#title' => t('Image'),
+				'#description' => t("Upload your slide image. Allowed extensions: jpg, jpeg, png, gif"),
+        '#upload_location' => 'public://oyster_slider_images/',
+        '#upload_validators' => array(
+			    'file_validate_is_image' => array(),
+			    'file_validate_extensions' => array('png gif jpg jpeg'),
+			  ),
+        '#default_value' => isset($item['file']) ? $item['file'] : '',
+        '#theme' => 'file_field_preview',
+			);
+		
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+		
+		break;
+		case 'oyster_slider_settings':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+		  
+      $element['time'] = array(
+				'#type' => 'textfield',
+				'#title' => t('Slide Time'),
+				'#description' => t("Enter your slide time in milliseconds (example: 4000)."),
+				'#default_value' => isset($items[$delta]['time']) ? $items[$delta]['time'] : '4000',
+			);
+			
+			$element['effect'] = array(
+				'#type' => 'select',
+				'#title' => t('Select your slider animation effect'),
+				'#description' => t("Enter your slide caption."),
+				'#options' => array(
+	        'fade' => t('Fade (default)'),
+	        'zoom' => t('Zoom'),
+	        'slide_left' => t('Slide Left'),
+	        'slide_right' => t('Slide Right'),
+	        'slide_top' => t('Slide Top'),
+	        'slide_bottom' => t('Slide Bottom'),
+        ),
+        '#default_value' => isset($items[$delta]['effect']) ? $items[$delta]['effect'] : 'fade',
+			); 
+			
+			$element['autoplay'] = array(
+			  '#type' => 'checkbox',
+        '#title' => t('Autoplay'),
+        '#description' => t("Enable the slider autoplay."),
+        '#default_value' => isset($items[$delta]['autoplay']) ? $items[$delta]['autoplay'] : 1,
+			);
+			
+			$element['controls'] = array(
+			  '#type' => 'checkbox',
+        '#title' => t('Controls'),
+        '#description' => t("Enable the slider controls."),
+        '#default_value' => isset($items[$delta]['controls']) ? $items[$delta]['controls'] : 1,
+			);
+			
+			$element['icons'] = array(
+			  '#type' => 'checkbox',
+        '#title' => t('Icons'),
+        '#description' => t("Enable the social icons."),
+        '#default_value' => isset($items[$delta]['icons']) ? $items[$delta]['icons'] : 1,
+			);
+		
+		break;
+		
+		case 'oyster_slider_social':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+				
+      $element['url'] = array(
+				'#type' => 'textfield',
+				'#title' => t('Icon URL'),
+				'#description' => t("Enter the URL for your social icon."),
+			);
+			
+			$element['icon'] = array(
+				'#type' => 'select',
+				'#title' => t('Social Icon'),
+				'#description' => t("Select your social icon."),
+				'#options' => array(
+				  'fa-facebook-square' => 'Facebook', 
+				  'fa-twitter-square' => 'Twitter', 
+				  'fa-pinterest-square' => 'Pinterest',
+				  'fa-google-plus-square' => 'Google Plus',
+				  'fa-linkedin-square' => 'LinkedIn',
+				  'fa-instagram' => 'Instagram',
+				  'fa-flickr' => 'Flickr',
+				  'fa-youtube-square' => 'YouTube',
+				  'fa-vimeo-square' => 'Vimeo',
+				  'fa-vk' => 'VK',
+				  'fa-tumblr-square' => 'Tumblr'
+	      ),
+			); 
+						
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+		
+		break;
+		
+		case 'oyster_gallery_content':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+		
+		  $element['title'] = array(
+				'#type' => 'textfield',
+				'#title' => t('Title'),
+				'#description' => t("Enter your gallery title."),
+			);
+					
+			$element['image'] = array(
+				'#type' => 'managed_file',
+				'#title' => t('Image'),
+				'#description' => t("Upload your gallery image. Allowed extensions: jpg, jpeg, png, gif"),
+        '#upload_location' => 'public://oyster_gallery_images/',
+        '#upload_validators' => array(
+			    'file_validate_is_image' => array(),
+			    'file_validate_extensions' => array('png gif jpg jpeg'),
+			  ),
+        '#default_value' => isset($item['file']) ? $item['file'] : '',
+        '#theme' => 'file_field_preview',
+			);
+			
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+
+		break;
+		
+		case 'oyster_gallery_display':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+		
+		  $element['display'] = array(
+				'#type' => 'select',
+				'#title' => t('Gallery Display'),
+				'#description' => t("Select the layout type for your gallery."),
+				'#options' => array(
+				  'kenburns' => 'Kenburns', 
+				  'flow' => 'Flow', 
+				  'ribbon' => 'Ribbon',
+				  'listing' => 'Photo Listing',
+				  'grid' => 'Grid',
+				  'grid2' => 'Grid 2',
+				  'masonry' => 'Masonry',
+				  'masonry2' => 'Masonry 2',
+
+	      ),
+			); 
+			
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+		
+		break;
+		
+		case 'oyster_striped_content':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+		
+		  $element['title'] = array(
+				'#type' => 'textfield',
+				'#title' => t('Title'),
+				'#description' => t("Enter your striped item title."),
+			);
+			
+			$element['caption'] = array(
+				'#type' => 'textfield',
+				'#title' => t('Caption'),
+				'#description' => t("Enter your striped item caption."),
+			);
+			
+			$element['url'] = array(
+				'#type' => 'textfield',
+				'#title' => t('URL'),
+				'#description' => t("Enter your striped item URL."),
+			);
+					
+			$element['image'] = array(
+				'#type' => 'managed_file',
+				'#title' => t('Image'),
+				'#description' => t("Upload your image. Allowed extensions: jpg, jpeg, png, gif"),
+        '#upload_location' => 'public://oyster_gallery_images/',
+        '#upload_validators' => array(
+			    'file_validate_is_image' => array(),
+			    'file_validate_extensions' => array('png gif jpg jpeg'),
+			  ),
+        '#default_value' => isset($item['file']) ? $item['file'] : '',
+        '#theme' => 'file_field_preview',
+			);
+			
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+
+		break;
+		
+		case 'oyster_striped_display':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+		
+		  $element['display'] = array(
+				'#type' => 'select',
+				'#title' => t('Striped Display'),
+				'#description' => t("Select the layout type for your striped items."),
+				'#options' => array( 
+				  'horizontal' => 'Horizontal', 
+				  'vertical' => 'Vertical',
+	      ),
+			); 
+			
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+		
+		break;
+		
+		case 'oyster_node_like':
+		
+		  $settings = $form_state['field'][$instance['field_name']][$langcode]['field']['settings'];
+			$field_name = $instance['field_name'];
+		
+		  $element['icon'] = array(
+				'#type' => 'select',
+				'#title' => t('Like Icon'),
+				'#description' => t("Select the icon to use for the like button."),
+				'#options' => array(
+				  'heart' => 'Heart', 
+				  'thumb' => 'Thumbs Up', 
+				  'star' => 'Star'
+	      ),
+	      '#default_value' => isset($items[$delta]['icon']) ? $items[$delta]['icon'] : 'heart',
+			); 
+			
+			// Loop through all the element children and set a default value if we have one. Then set HTML wrappers.
+			foreach (element_children($element) as $element_key) {
+				$value = isset($items[$delta][$element_key]) ? $items[$delta][$element_key] : '';
+				$element[$element_key]['#default_value'] = $value;
+			}
+		
+		break;
+	}
+	
+	return $element;
+	
+}
+
+/**
+ * Implements hook_field_insert().
+ */
+function oyster_utilities_field_insert($entity_type, $entity, $field, $instance, $langcode, &$items) {
+ // Only run _oyster_utilities_file_process() if Oyster entity type.
+  if ($entity_type == 'oyster_gallery' || $entity_type == 'oyster_slider' || $entity_type == 'oyster_striped') {
+    foreach ($items as $delta => $value) {
+      _oyster_utilities_file_process($items[$delta], $entity_type, $entity->id);
+    }
+  } 
+}
+
+/**
+ * Implements hook_field_presave().
+ */
+function oyster_utilities_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  // Exit function if a new entity is being created.
+  if (!isset($entity->is_new) || $entity->is_new == TRUE) {
+    return;
+  }
+  // Only run _oyster_utilities_file_process() if Oyster entity type.
+  if ($entity_type == 'oyster_gallery' || $entity_type == 'oyster_slider' || $entity_type == 'oyster_striped') {
+    foreach ($items as $delta => $value) {
+      _oyster_utilities_file_process($items[$delta], $entity_type, $entity->id);
+    }
+  }
+}
+
+/**
+ * Saves image permanently.
+ */
+function _oyster_utilities_file_process(&$item, $entity_type, $id) {
+  if (!empty($item['image'])) {
+	  $file = file_load($item['image']);
+	  $file->status = FILE_STATUS_PERMANENT;
+	  file_save($file);
+	  file_usage_add($file, 'oyster_utilities', $entity_type, $id ); 
+  }
+}
+
+/**
+ * Returns HTML for a managed file element with thumbnail.
+ */
+function theme_file_field_preview($variables) {
+  $element = $variables['element'];
+  $output = '';
+  if($element['fid']['#value'] != 0) {
+    // if image is uploaded show its thumbnail to the output HTML
+    $output .= '<div class="multifield-thumbnail">';
+    $output .= theme('image_style', array('style_name' => 'thumbnail', 'path' => file_load($element['fid']['#value'])->uri, 'getsize' => FALSE));
+    $output .= drupal_render_children($element); // renders rest of the element as usual
+    $output .= '</div>';
+  }
+  return $output; // of course, has to be returned back
+}
+
+function oyster_utilities_vote($entity_type, $entity_id, $source) {
+  global $user; // Call $user global.
+	$votes = array(
+    'entity_type' => $entity_type,
+    'entity_id' => $entity_id,
+    'value_type' => 'points',
+    'value' => 1,
+    'tag' => 'oyster_'.$entity_type.'_like',
+    'vote_source' => $source,
+  );
+
+  votingapi_set_votes($votes);
+}
+
+function oyster_utilities_get_votes($entity_type, $entity_id, $uid) {
+  $criteria['entity_type'] = $entity_type;
+  $criteria['entity_id'] = $entity_id;
+  $criteria['value_type'] = 'points';
+  $criteria['tag'] = 'oyster_'.$entity_type.'_like';
+  if ($uid == 0) {
+    $criteria['vote_source'] = ip_address();
+  }
+  else {
+    $criteria['uid'] = $uid;
+  }
+    
+  $results = votingapi_select_votes($criteria);
+  return $results;
+}
+
+
+function oyster_utilities_get_score($entity_type, $entity_id) {
+  $criteria['entity_type'] = $entity_type;
+  $criteria['entity_id'] = $entity_id;
+  $criteria['value_type'] = 'points';
+  $criteria['function'] = 'sum';
+  $criteria['tag'] = 'oyster_'.$entity_type.'_like';
+  
+  $results = votingapi_select_results($criteria);
+  
+  if (empty($results)) {
+    return 0;
+  }
+  else {
+    return $results[0]['value'];
+  }
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function oyster_utilities_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  global $base_url, $user;
+	$element = array();
+	$output = '';
+	switch ($display['type']) {
+	  case 'image_url':
+      // Check if the formatter involves a link.
+      if ($display['settings']['image_link'] == 'content') {
+        $uri = entity_uri($entity_type, $entity);
+      }
+      elseif ($display['settings']['image_link'] == 'file') {
+        $link_file = TRUE;
+      }
+
+      foreach ($items as $delta => $item) {
+        if (isset($link_file)) {
+          $uri = array(
+            'path' => file_create_url($item['uri']),
+            'options' => array(),
+          );
+        }
+        $element[$delta] = array(
+          '#theme' => 'oyster_utilities',
+          '#item' => $item,
+          '#image_style' => $display['settings']['image_style'],
+          '#path' => isset($uri) ? $uri : '',
+          '#url_type' => $display['settings']['url_type'],
+        );
+      }
+    break;	
+    case 'oyster_node_like':
+      if ($items) {
+      	     
+	      switch ($items[0]['icon']) {
+		      case 'heart':
+		        $icon = !oyster_utilities_get_votes($entity_type, $entity->vid, $user->uid) ? 'fa fa-heart-o' : 'fa fa-heart';
+		      break;
+		      case 'thumb':
+		        $icon = !oyster_utilities_get_votes($entity_type, $entity->vid, $user->uid) ? 'fa fa-thumbs-o-up' : 'fa fa-thumbs-up';
+		      break;
+		      case 'star':
+		        $icon = !oyster_utilities_get_votes($entity_type, $entity->vid, $user->uid) ? 'fa fa-star-o' : 'fa fa-star';
+		      break;
+		      default:
+		        $icon = 'fa fa-heart-o';
+		      break;
+	      }
+	     
+	      foreach ($items as $delta => $item) {
+	        $output .= '
+	        <div class="oyster-node-like">
+		        <a href="'.$base_url.'/like/'.$entity_type.'/'.$entity->vid.'" class="oyster-like">
+		          <div class="vote-icon-'.$entity->vid.' vote-icon-wrapper">
+		            <i class="'.$icon.'"></i>
+		          </div>
+		        </a>
+		        <span class="vote-count-'.$entity->vid.'"><span class="vote-count-number-'.$entity->vid.'">'.oyster_utilities_get_score($entity_type, $entity->vid).'</span></span>
+	        </div>
+	        ';
+	      }
+	      
+	      $element[$delta] = array('#markup' => $output);
+      }
+    break;
+	}
+	
+	return $element;
+}
+
+/**
+ * Callback function for oyster_utilities_menu().
+ */
+function oyster_utilities_ajax($type, $id) {
+  global $user; // Call $user global.
+  $source = $user->uid ? $user->uid : ip_address();
+  
+  oyster_utilities_vote($type, $id, $source);
+  $score = oyster_utilities_get_score($type, $id);
+  
+  if (isset($_POST['from_js']) && $_POST['from_js']) {
+    
+    // Return the time if the from_js request para is set to true
+    $response = array(
+      'score' => $score,
+      'nid' => $id,
+    );
+    drupal_json_output($response);
+
+    exit;
+  } else {
+    // Return an empty json array for incorrect request
+    drupal_json_output(array());
+    exit;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function oyster_utilities_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  
+  if ($display['type'] == 'image_url') {
+	  $element['url_type'] = array(
+	    '#title' => t('URL type'),
+	    '#type' => 'radios',
+	    '#options' => array(
+	      OYSTER_UTILITIES_URI_PATH => t('URI path'),
+	      OYSTER_UTILITIES_RELATIVE_PATH => t('Relative file path'),
+	      OYSTER_UTILITIES_ABSOLUTE_PATH => t('Absolute file path (recommended)'),
+	      OYSTER_UTILITIES_FULL_URL => t('Full URL'),
+	    ),
+	    '#default_value' => $settings['url_type'],
+	  );
+	  $element['url_type'][OYSTER_UTILITIES_URI_PATH]['#description'] = t("Uses the URI path, like: 'public://image.png'");
+	  $element['url_type'][OYSTER_UTILITIES_RELATIVE_PATH]['#description'] = t("No base URL or leading slash, like: 'sites/default/files/image.png'");
+	  $element['url_type'][OYSTER_UTILITIES_ABSOLUTE_PATH]['#description'] = t("With leading slash, no base URL, like: '/sites/default/files/image.png'");
+	  $element['url_type'][OYSTER_UTILITIES_FULL_URL]['#description'] = t("Like: 'http://example.com/sites/default/files/image.png'");
+	
+	  $image_styles = image_style_options(FALSE);
+	  $element['image_style'] = array(
+	    '#title' => t('Image style'),
+	    '#type' => 'select',
+	    '#default_value' => $settings['image_style'],
+	    '#empty_option' => t('None (original image)'),
+	    '#options' => $image_styles,
+	  );
+	
+	  $link_types = array(
+	    'content' => t('Content'),
+	    'file' => t('File'),
+	  );
+	  $element['image_link'] = array(
+	    '#title' => t('Link image url to'),
+	    '#type' => 'select',
+	    '#default_value' => $settings['image_link'],
+	    '#empty_option' => t('Nothing'),
+	    '#options' => $link_types,
+	  );
+	
+	  return $element;
+  }
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function oyster_utilities_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = array();
+  
+  if (!empty($settings['url_type'])) {
+  
+	  switch ($settings['url_type']) {
+	    case OYSTER_UTILITIES_URI_PATH:
+	      $summary[] = t('Use uri path');
+	      break;
+	
+	    case OYSTER_UTILITIES_RELATIVE_PATH:
+	      $summary[] = t('Use relative path');
+	      break;
+	
+	    case OYSTER_UTILITIES_ABSOLUTE_PATH:
+	      $summary[] = t('Use absolute path');
+	      break;
+	
+	    case OYSTER_UTILITIES_FULL_URL:
+	      $summary[] = t('Use full URL');
+	      break;
+	  }
+  
+  }
+
+  $image_styles = image_style_options(FALSE);
+  // Unset possible 'No defined styles' option.
+  unset($image_styles['']);
+  // Styles could be lost because of enabled/disabled modules that defines
+  // their styles in code.
+   if (!empty($settings)) {
+	  if (isset($image_styles[$settings['image_style']])) {
+	    $summary[] = t('URL for image style: @style', array('@style' => $image_styles[$settings['image_style']]));
+	  }
+	  else {
+	    $summary[] = t('Original image URL');
+	  }
+  }
+  if (!empty($settings)) {
+	  $link_types = array(
+	    'content' => t('Linked to content'),
+	    'file' => t('Linked to file'),
+	  );
+	  // Display this setting only if image is linked.
+	  if (isset($link_types[$settings['image_link']])) {
+	    $summary[] = $link_types[$settings['image_link']];
+	  }
+  }
+
+  return implode('<br />', $summary);
+}
+
+
+/**
+ * Returns HTML for an image url field formatter.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - item: An array of image data.
+ *   - image_style: An optional image style.
+ *   - path: An array containing the link 'path' and link 'options'.
+ *
+ * @ingroup themeable
+ */
+function theme_oyster_utilities($variables) {
+  $item = $variables['item'];
+  $image = array(
+    'path' => $item['uri'],
+    'alt' => $item['alt'],
+  );
+  // Do not output an empty 'title' attribute.
+  if (drupal_strlen($item['title']) > 0) {
+    $image['title'] = $item['title'];
+  }
+  // Return the URI path.
+  if ($variables['url_type'] == 3) {
+    return $item['uri'];
+  }
+  $output = file_create_url($item['uri']);
+  if ($variables['image_style']) {
+    $image['style_name'] = $variables['image_style'];
+    $output = image_style_url($image['style_name'], $item['uri']);
+  }
+  $output = oyster_utilities_convert_full_url($output, $variables['url_type']);
+  if ($variables['path']) {
+    $path = $variables['path']['path'];
+    $path = oyster_utilities_convert_full_url($path, $variables['url_type']);
+    $options = $variables['path']['options'];
+    // When displaying an image inside a link, the html option must be TRUE.
+    $options['html'] = TRUE;
+    $output = l($output, $path, $options);
+  }
+
+  return $output;
+}
+
+/**
+ * Converts a full URL to the choosen format.
+ *
+ * @param string $url
+ *   The full URL to convet.
+ * @param constant $format
+ *   OYSTER_UTILITIES_RELATIVE_PATH for relative path,
+ *   OYSTER_UTILITIES_ABSOLUTE_PATH for absolute path,
+ *   OYSTER_UTILITIES_FULL_URL for full URL.
+ *
+ * @return string
+ *   The converted URL.
+ */
+function oyster_utilities_convert_full_url($url, $format = OYSTER_UTILITIES_FULL_URL) {
+  switch ($format) {
+    case OYSTER_UTILITIES_RELATIVE_PATH:
+      $url = _oyster_utilities_get_relative_file_url($url);
+      break;
+
+    case OYSTER_UTILITIES_ABSOLUTE_PATH:
+      $url = _oyster_utilities_get_absolute_file_url($url);
+      break;
+  }
+
+  return $url;
+}
+
+/**
+ * Returns an absolute url.
+ */
+function _oyster_utilities_get_absolute_file_url($url) {
+  global $base_url;
+  if (strpos($url, $base_url) === 0) {
+    $url = base_path() . ltrim(str_replace($GLOBALS['base_url'], '', $url), '/');
+  }
+  return $url;
+}
+
+/**
+ * Returns a relative url.
+ */
+function _oyster_utilities_get_relative_file_url($url) {
+  $url = _oyster_utilities_get_absolute_file_url($url);
+  if ($url[0] == '/') {
+    $url = substr($url, 1);
+  }
+  return $url;
+}

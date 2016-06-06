@@ -54,7 +54,7 @@
         <?php if (isset($content['field_category'])): ?>
           <span><?php print t('in'); ?> <?php print render($content['field_category']); ?></span>
         <?php endif; ?>  
-        <?php if ( theme_get_setting('article_meta_comments') == '1' ) : ?>
+        <?php if ( theme_get_setting('article_meta_comments') == '1' && isset($comment_count) ) : ?>
         <span><a href="<?php print $node_url;?>/#comments"><?php print $comment_count; ?> <?php print t('Comment'); ?><?php if ($comment_count != "1" ) { echo "s"; } ?></a></span>
         <?php endif; ?>
         <?php if (render($content['field_tags'])): ?><span><?php print t('tags: '); print render($content['field_tags']); ?></span><?php endif;?>

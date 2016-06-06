@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function oyster_slider_install() {
+  // Clear the field info cache so fields can be added to Oyster Slider entity.
+  field_info_cache_clear();
+  
+  // Create the fields
+  $fields = array(
+    'slider_content' => array(
+	    'field_name' => 'slider_content',
+	    'type' => 'oyster_slider_content',
+	    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+	  ),
+	  'slider_icons' => array(
+	    'field_name' => 'slider_icons',
+	    'type' => 'oyster_slider_social',
+	    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+	  ),
+	  'slider_settings' => array(
+	    'field_name' => 'slider_settings',
+	    'type' => 'oyster_slider_settings',
+	    'cardinality' => 1,
+	  ),
+	);
+	
+	foreach ($fields as $field) {
+    field_create_field($field);
+  }
+
+  // Create the instances.
+  $instances = array(
+    'slider_content' => array(
+	    'field_name' => 'slider_content',
+	    'entity_type' => 'oyster_slider',
+	    'bundle' => 'oyster_slider',
+	    'label' => 'Slider Content',
+	    'required' => TRUE,
+	    'widget' => array(
+	      'type' => 'oyster_slider_content',
+	    ),
+	  ),
+	  'slider_icons' => array(
+	    'field_name' => 'slider_icons',
+	    'entity_type' => 'oyster_slider',
+	    'bundle' => 'oyster_slider',
+	    'label' => 'Slider Icons',
+	    'required' => FALSE,
+	    'widget' => array(
+	      'type' => 'oyster_slider_icons',
+	    ),
+	  ),
+	  'slider_settings' => array(
+	    'field_name' => 'slider_settings',
+	    'entity_type' => 'oyster_slider',
+	    'bundle' => 'oyster_slider',
+	    'label' => 'Slider Settings',
+	    'required' => TRUE,
+	    'widget' => array(
+	      'type' => 'oyster_slider_settings',
+	    ),
+	  ),
+  );
+  
+  foreach ($instances as $instance) {
+    field_create_instance($instance);
+  }
+  
+  // Slide Image Style
+  image_style_save(array('name' => 'oyster_slider_image','label' => 'Oyster Slider Image'));
+ 
+  // Slide Thumbnail Style
+  $style = image_style_save(array(
+    'name' => 'oyster_slider_thumbnail',
+    'label' => 'Oyster Slider Thumbnail (120 x 130)')
+  );
+  $effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 120,
+        'height' => 130,
+        'upscale' => TRUE,
+    ),
+    'isid' => $style['isid'],
+  );
+  image_effect_save($effect);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function oyster_slider_uninstall() {
+  $fields = array('slider_content', 'slider_settings', 'slider_icons');
+  
+  foreach ($fields as $field) {
+    field_delete_field($field);
+  }
+  // Delete image styles.
+  image_style_delete(image_style_load('oyster_slider_image'));
+  image_style_delete(image_style_load('oyster_slider_thumbnail'));
+}
+
+/**
+ * Implements hook_schema().
+ */
+function oyster_slider_schema() {
+
+  $schema = array();
+
+  $schema['oyster_slider'] = array(
+    'description' => 'The base table for the Oyster Slider entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key of the Oyster Slider entity',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Oyster Slider name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}

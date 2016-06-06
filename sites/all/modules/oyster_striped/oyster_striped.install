@@ -1,0 +1,96 @@
+<?php 
+
+/**
+ * Implements hook_install().
+ */
+function oyster_striped_install() {
+  // Clear the field info cache so fields can be added to Oyster striped entity.
+  field_info_cache_clear();
+  
+  // Create the fields
+  $fields = array(
+    'striped_content' => array(
+	    'field_name' => 'striped_content',
+	    'type' => 'oyster_striped_content',
+	    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+	  ),
+	  'striped_display' => array(
+	    'field_name' => 'striped_display',
+	    'type' => 'oyster_striped_display',
+	    'cardinality' => 1,
+	  ),
+	);
+	
+	foreach ($fields as $field) {
+    field_create_field($field);
+  }
+
+  // Create the instances.
+  $instances = array(
+    'striped_content' => array(
+	    'field_name' => 'striped_content',
+	    'entity_type' => 'oyster_striped',
+	    'bundle' => 'oyster_striped',
+	    'label' => 'striped Content',
+	    'required' => TRUE,
+	    'widget' => array(
+	      'type' => 'oyster_striped_content',
+	    ),
+	  ),
+	  'striped_display' => array(
+	    'field_name' => 'striped_display',
+	    'entity_type' => 'oyster_striped',
+	    'bundle' => 'oyster_striped',
+	    'label' => 'striped Display',
+	    'required' => TRUE,
+	    'widget' => array(
+	      'type' => 'oyster_striped_display',
+	    ),
+	  ),
+  );
+  
+  foreach ($instances as $instance) {
+    field_create_instance($instance);
+  }
+    
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function oyster_striped_uninstall() {
+  $fields = array('striped_content', 'striped_display');
+  
+  foreach ($fields as $field) {
+    field_delete_field($field);
+  }
+}
+
+/**
+ * Implements hook_schema().
+ */
+function oyster_striped_schema() {
+
+  $schema = array();
+
+  $schema['oyster_striped'] = array(
+    'description' => 'The base table for the Oyster Striped entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key of the Oyster Striped entity',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Oyster Striped name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}

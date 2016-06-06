@@ -1,0 +1,12 @@
+name = Oyster Utilities
+description = Helper module for the Oyster Drupal 7 Theme.
+core = 7.x
+package = Oyster Theme
+version = "7.x-1.0"
+
+dependencies[] = votingapi
+
+files[] = oyster_utilities.module
+files[] = views/oyster_utilities.views.inc
+files[] = views/oyster_utilities_views_plugin_layouts.inc
+files[] = views/oyster_utilities_handler_field_term_node_tid.inc

@@ -1,0 +1,132 @@
+<?php 
+
+/**
+ * Implements hook_install().
+ */
+function oyster_gallery_install() {
+  // Clear the field info cache so fields can be added to Oyster gallery entity.
+  field_info_cache_clear();
+  
+  // Create the fields
+  $fields = array(
+    'gallery_content' => array(
+	    'field_name' => 'gallery_content',
+	    'type' => 'oyster_gallery_content',
+	    'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+	  ),
+	  'gallery_display' => array(
+	    'field_name' => 'gallery_display',
+	    'type' => 'oyster_gallery_display',
+	    'cardinality' => 1,
+	  ),
+	);
+	
+	foreach ($fields as $field) {
+    field_create_field($field);
+  }
+
+  // Create the instances.
+  $instances = array(
+    'gallery_content' => array(
+	    'field_name' => 'gallery_content',
+	    'entity_type' => 'oyster_gallery',
+	    'bundle' => 'oyster_gallery',
+	    'label' => 'Gallery Content',
+	    'required' => TRUE,
+	    'widget' => array(
+	      'type' => 'oyster_gallery_content',
+	    ),
+	  ),
+	  'gallery_display' => array(
+	    'field_name' => 'gallery_display',
+	    'entity_type' => 'oyster_gallery',
+	    'bundle' => 'oyster_gallery',
+	    'label' => 'Gallery Display',
+	    'required' => TRUE,
+	    'widget' => array(
+	      'type' => 'oyster_gallery_display',
+	    ),
+	  ),
+  );
+  
+  foreach ($instances as $instance) {
+    field_create_instance($instance);
+  }
+  
+  // Oyster Gallery flow image style.
+  $g_flow_style = image_style_save(array(
+    'name' => 'oyster_gallery_flow',
+    'label' => 'Oyster Gallery Flow (740 x 550)')
+  );
+  $g_flow_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 740,
+        'height' => 550,
+        'upscale' => TRUE,
+    ),
+    'isid' => $g_flow_style['isid'],
+  );
+  image_effect_save($g_flow_effect);
+  
+   // Oyster Gallery grid image style.
+  $g_grid_style = image_style_save(array(
+    'name' => 'oyster_gallery_grid',
+    'label' => 'Oyster Gallery Grid (540 x 375)')
+  );
+  $g_grid_effect = array(
+    'name' => 'image_scale_and_crop',
+    'data' => array(
+        'width' => 540,
+        'height' => 375,
+        'upscale' => TRUE,
+    ),
+    'isid' => $g_grid_style['isid'],
+  );
+  image_effect_save($g_grid_effect);
+  
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function oyster_gallery_uninstall() {
+  $fields = array('gallery_content', 'gallery_display');
+  
+  foreach ($fields as $field) {
+    field_delete_field($field);
+  }
+  
+  // Delete image styles.
+  image_style_delete(image_style_load('oyster_gallery_flow'));
+  image_style_delete(image_style_load('oyster_gallery_grid'));
+}
+
+/**
+ * Implements hook_schema().
+ */
+function oyster_gallery_schema() {
+
+  $schema = array();
+
+  $schema['oyster_gallery'] = array(
+    'description' => 'The base table for the Oyster Gallery entity',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary key of the Oyster Gallery entity',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'Oyster Gallery name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
